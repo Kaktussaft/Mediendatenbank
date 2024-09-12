@@ -1,0 +1,6 @@
+# Ignore Visual Studio Code settings
+.vscode/
+phpinfo.php
+vendor/
+composer.lock
+.uploads/

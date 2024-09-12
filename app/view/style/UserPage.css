@@ -1,0 +1,174 @@
+html, body {
+    height: 100%;
+    background-color: #35343d;
+    background-image: url(/Mediendatenbank/Design/Background.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.view{
+    display: flex;
+    align-items: center;
+    padding-left: calc(5% - 50px);
+    padding-right: calc(5% + 50px);
+}
+
+.view span{
+    font-weight: bold;
+    font-size: 25pt;
+    padding-left: 20px;
+}
+
+.modifyAccountAndLogout{
+    position: absolute;
+    top: 40px;
+    left: calc(100% - 410px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 400px;
+}
+
+.linkSet{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.linkSet a{
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+.searchBar{
+    margin-top: 10px;
+    height: fit-content;
+}
+
+.searchBar #searchBar{
+    color: black;
+    height: fit-content;
+    font-size: 15pt;
+    border-radius: 5px;
+    border: 2px solid #02BFBF;
+}
+
+.upAndNav{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0;
+    width: 100%;
+    height: fit-content;
+}
+
+.uploadButton{
+    padding-left: calc(5% - 75px);
+    padding-right: calc(5% - 75px);
+}
+
+.navigationPanel{
+    padding: 20px;
+    margin-left: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navigationPanel > button{
+    flex: 1;
+    background-color: #02BFBF;
+    border: 2px solid #02BFBF;
+    padding: 20px;
+    font-weight: bold;
+    color: white;
+    width: 19%;
+    margin: 20px;
+    font-size: 15pt;
+}
+
+.content{
+    display: flex;
+    justify-content: space-between;
+    min-height: calc(100vh - 400px);
+}
+
+.sortAndFilter{
+    width: fit-content;
+}
+
+.sorting{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #02BFBF;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.sortSelection, .sortRadios{
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px;
+}
+
+.sortCriteria, .sortCriteria option{
+    color: black;
+}
+
+.keywording{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #02BFBF;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.modifyKeyWords{
+    width: 80%;
+    margin: 10px;
+}
+
+.modifyKeyWordButton{
+    background-color: #02BFBF;
+    border: 2px solid #02BFBF;
+    padding: 10px;
+    font-weight: bold;
+    color: white;
+}
+
+.contentArea{
+    border: 2px solid #02BFBF;
+    margin-left: 20px;
+    margin-top: 20px;
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.contentArea img{
+    width: 150px;
+    margin: 10px;
+    border: 1px solid #ccc;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+
+
+hr{
+    border-color: #02BFBF;
+}
+
+/*Fonts*/
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}

@@ -1,0 +1,26 @@
+Login Page		Farbe			Schriftart		
+Frames: 		#02BFBF			/			
+Enter Username: 	#AAAAAA			PangMenZhengDao		
+Login: 			#02BFBF 		Arial
+Text unter Login:	#555555			Arial
+Text über Login Frame:	#FFFFFF			PangMenZhengDao
+
+Admin Dashboard		
+Texte	 		#FFFFFF			PangMenZhengDao			(Logo, Button-Texte, Konto Logout)
+search			#555555			PangMenZhengDao
+Buttons			#02BFBF							Opacity 50%
+(Die Lupe im Search Feld ist kein Image, sondern ein Kreis und ein Strich in #02BFBF)
+
+User Dashboard
+Quasi alles wie beim admin Dashboard +
+Text von Feldern im linken menu in Roboto. Ist aber eine ziemlich normale schriftart. Kann man fast alles nehmen.
+Selected Text in #02BFBF sonst weiß. 
+
+
+
+
+
+
+
+
+

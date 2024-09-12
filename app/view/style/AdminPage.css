@@ -1,0 +1,82 @@
+html, body {
+    height: 100%;
+    background-color: #35343d;
+    background-image: url(/Mediendatenbank/Design/Background.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
+.view{
+    display: flex;
+    align-items: center;
+    padding-left: calc(5% - 50px);
+    padding-right: calc(5% + 50px);
+}
+
+.view span{
+    font-weight: bold;
+    font-size: 25pt;
+    padding-left: 20px;
+}
+
+.toggleViewAndLogout{
+    position: absolute;
+    top: 40px;
+    left: calc(100% - 210px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    width: 200px;
+    gap: 20px;
+}
+
+.toggleViewAndLogout a{
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+.navigationPanel {
+    padding: 20px;
+    width: calc(100% - 40px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    height: fit-content;
+}
+
+.navigationPanel > button {
+    flex: 1;
+    background-color: #02BFBF;
+    border: 2px solid #02BFBF;
+    padding: 20px;
+    font-weight: bold;
+    color: white;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 15pt;
+}
+
+.contentArea{
+    display: flex;
+    border: 2px solid #02BFBF;
+    margin-top: 20px;
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+    min-height: calc(100vh - 400px);
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+hr{
+    border-color: #02BFBF;
+}
+
+/*Fonts*/
+*{
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
