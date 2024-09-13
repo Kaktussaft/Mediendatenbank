@@ -60,6 +60,7 @@ class MediumController extends Controller
                     }
 
                     $this->currentUserId = $_SESSION['currentUser']['Benutzer_ID'];
+                    $mediaID = $this->generateUUID();
 
                     if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
                         $filePath = '/Mediendatenbank/public/uploads/' . $fileType . '/' . basename($file['name']);
@@ -68,16 +69,16 @@ class MediumController extends Controller
                             case 'photo':
                                 list($width, $height) = getimagesize($file['tmp_name']);
                                 $fileResolution = $width . 'x' . $height;
-                                $this->mediumRepository->createPhotoMedium($fileName, $filePath, $fileType, $fileSize, $uploadDate, $fileResolution, $this->currentUserId);
+                                $this->mediumRepository->createPhotoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, $fileResolution, $this->currentUserId);
                                 break;
                             case 'video':
-                                $this->mediumRepository->createVideoMedium($fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
+                                $this->mediumRepository->createVideoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
                                 break;
                             case 'audiobook':
-                                $this->mediumRepository->createAudioBookMedium($fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
+                                $this->mediumRepository->createAudioBookMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
                                 break;
                             case 'ebook':
-                                $this->mediumRepository->createEbookMedium($fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
+                                $this->mediumRepository->createEbookMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
                                 break;
                         }
 
@@ -163,5 +164,16 @@ class MediumController extends Controller
             default:
                 throw new Exception('Invalid media type.');
         }
+    }
+    
+    function generateUUID() {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
     }
 }

@@ -69,7 +69,7 @@ if ($conn->query($sql) === TRUE) {
 #---------------------------------------------------------------------------
 
 $sql = "CREATE TABLE Ebooks (
-    ebook_ID int auto_increment primary key, 
+    ebook_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
     Dateipfad varchar(50), 
     Typ varchar(10) not null, 
@@ -92,7 +92,7 @@ if ($conn->query($sql) === TRUE) {
 #---------------------------------------------------------------------------
 
 $sql = "CREATE TABLE Hörbücher (
-    Hörbuch_ID int auto_increment primary key, 
+    Hörbuch_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
     Dateipfad varchar(50), 
     Typ varchar(10) not null, 
@@ -115,7 +115,7 @@ if ($conn->query($sql) === TRUE) {
 #---------------------------------------------------------------------------
 
 $sql = "CREATE TABLE Videos (
-    Video_ID int auto_increment primary key, 
+    Video_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
     Dateipfad varchar(50), 
     Typ varchar(10) not null, 
@@ -138,7 +138,7 @@ if ($conn->query($sql) === TRUE) {
 #---------------------------------------------------------------------------
 
 $sql = "CREATE TABLE Fotos (
-    Foto_ID int auto_increment primary key, 
+    Foto_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
     Dateipfad varchar(50), 
     Typ varchar(10) not null, 
