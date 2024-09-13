@@ -138,6 +138,7 @@ class UserController extends Controller
         $users = $this->userRepository->readAllUsers();
         echo json_encode($users);
     }
+    
     public function deleteUser()
     {
         $rawData = file_get_contents('php://input');

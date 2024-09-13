@@ -29,6 +29,7 @@ class UserRepository
         $stmt->execute();
         $stmt->close();
     }
+    
     public function readUserByUsername($username)
     {
         $stmt = $this->conn->prepare("SELECT Benutzername FROM Benutzer WHERE Benutzername = ?");
@@ -54,6 +55,7 @@ class UserRepository
         $stmt->close();
         return $user;
     }
+
     public function updateUser($username, $email, $surname, $name, $isAdmin, $previousUsername)
     {
         $stmt = $this->conn->prepare("UPDATE Benutzer SET Benutzername = ?, EMail = ?, Nachname = ?, Vorname = ?, Rolle = ? WHERE Benutzername = ?");
@@ -71,6 +73,7 @@ class UserRepository
         $stmt->close();
         return $users;
     }
+    
     public function deleteUser($username)
     {
         $stmt = $this->conn->prepare("DELETE FROM Benutzer WHERE Benutzername = ?");
