@@ -12,6 +12,7 @@ class MediumController extends Controller
 
     private $mediumRepository;
     private $currentUserId;
+    private $data;
 
     public function __construct()
     {
@@ -26,6 +27,10 @@ class MediumController extends Controller
         }
 
         $this->mediumRepository = new MediumRepository();
+
+        $rawData = file_get_contents('php://input');
+        $this->data = json_decode($rawData, true);
+        error_log(print_r($this->data, true));
     }
 
     public function uploadFile()
@@ -122,6 +127,13 @@ class MediumController extends Controller
             $this->mediumRepository->updateMedium($id, $fileType, $title, $resolution, $duration, $speaker, $author, $pages);
         }
        
+    }
+
+    public function getMediaAmountPerUser()
+    {
+        $userId = $this->data['userId'] ?? '';
+        $result = $this->mediumRepository->readMediaAmountPerUser($userId);
+        echo json_encode(['status' => 'success', 'data' => $result]);
     }
 
     private function determineMediaType($fileName)
