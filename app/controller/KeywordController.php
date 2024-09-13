@@ -11,6 +11,7 @@ class KeywordController extends Controller
 {
     private $keywordRepository;
     private $currentUserId;
+    private $data;
 
     public function __construct()
     {
@@ -24,26 +25,37 @@ class KeywordController extends Controller
             throw new Exception("User is not logged in.");
         }
         $this->keywordRepository = new KeywordRepository();
+
+        $rawData = file_get_contents('php://input');
+        $this->data = json_decode($rawData, true);
+        error_log(print_r($this->data, true));
     }
 
-    public function createKeyword(string $keywordName)
+    public function createKeyword()
     {
+        $keywordName = $this->data['keywordName'] ?? '';
         $keyword = new KeywordModel($keywordName);
         $this->keywordRepository->createKeyword($keyword, $this->currentUserId);
     }
 
-    public function updateKeyword(int $keywordId, string $keywordName)
+    public function updateKeyword()
     {
+        $keywordId = $this->data['keywordId'] ?? 0;
+        $keywordName = $this->data['keywordName'] ?? '';
         $this->keywordRepository->updateKeywordName($keywordId, $keywordName);
     }
 
-    public function createAssociation(int $keywordId, int $mediumId)
+    public function createAssociation()
     {
+        $keywordId = $this->data['keywordId'] ?? 0;
+        $mediumId = $this->data['mediumId'] ?? 0;
         $this->keywordRepository->assignKeywordToMedia($keywordId, $mediumId);
     }
 
     public function deleteAssociation(int $keywordId, int $mediumId)
     {
+        $keywordId = $this->data['keywordId'] ?? 0;
+        $mediumId = $this->data['mediumId'] ?? 0;
         $this->keywordRepository->removeKeywordFromMedia($keywordId, $mediumId);
     }
 
@@ -54,6 +66,7 @@ class KeywordController extends Controller
     }
     public function deleteKeyword(int $keywordId)
     {
+        $keywordId = $this->data['keywordId'] ?? 0;
         $this->keywordRepository->deleteKeyword($keywordId);
     }
 }
