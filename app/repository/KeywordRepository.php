@@ -86,4 +86,14 @@ class KeywordRepository{
         $stmt->close();
     }
 
+    public function readKeywordAmountPerUser($userId){
+        $stmt = $this->conn->prepare("SELECT COUNT(Schlagwort_ID) FROM Schlagworte WHERE Benutzer_ID = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $amount = $result->fetch_assoc();
+        $stmt->close();
+        return $amount;
+    }
+
 }
