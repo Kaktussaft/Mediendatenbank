@@ -73,13 +73,13 @@ class MediumRepository
         }
     }
 
-    public function readAllMedia($currentUserId) //sort asc/desc/size/date
+    public function readAllMedia($currentUserId, $direction, $sortingParamter) //sort asc/desc/size/date
     {
         $mediaTypes = ['Fotos', 'Videos', 'Hörbücher', 'Ebooks'];
         $results = [];
 
         foreach ($mediaTypes as $type) {
-            $stmt = $this->conn->prepare("SELECT * FROM $type WHERE Benutzer_ID = ?");
+            $stmt = $this->conn->prepare("SELECT * FROM $type WHERE Benutzer_ID = ? ORDER BY $sortingParamter $direction");
             $stmt->bind_param("s", $currentUserId);
             $stmt->execute();
             $result = $stmt->get_result();
