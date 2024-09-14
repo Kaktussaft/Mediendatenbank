@@ -50,13 +50,13 @@ class MediumController extends Controller
                     $fileType = $this->determineMediaType($file['name']);
                     $fileName = $file['name'];
                     $fileSize = $file['size'];
-                    
+
                     $uploadDir = $this->getUploadDirectory($fileType);
                     $uploadFile = $uploadDir . basename($file['name']);
                     $uploadDate =  (new DateTime())->format('Y-m-d');
-                  
 
-                    if($file['error'] !== 0) {
+
+                    if ($file['error'] !== 0) {
                         throw new Exception('Error while uploading file: ' . $file['error']);
                     }
 
@@ -72,8 +72,6 @@ class MediumController extends Controller
 
                         switch ($fileType) {
                             case 'photo':
-                                list($width, $height) = getimagesize($file['tmp_name']);
-                                $fileResolution = $width . 'x' . $height;
                                 $this->mediumRepository->createPhotoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, $fileResolution, $this->currentUserId);
                                 break;
                             case 'video':
@@ -102,7 +100,7 @@ class MediumController extends Controller
     }
 
 
-    public function getAllMediums()
+    public function getAllMediums() //take in title as search param
     {
         try {
             $media = $this->mediumRepository->readAllMedia($this->currentUserId);
@@ -126,7 +124,6 @@ class MediumController extends Controller
 
             $this->mediumRepository->updateMedium($id, $fileType, $title, $resolution, $duration, $speaker, $author, $pages);
         }
-       
     }
 
     public function getMediaAmountPerUser()
@@ -177,15 +174,19 @@ class MediumController extends Controller
                 throw new Exception('Invalid media type.');
         }
     }
-    
-    function generateUUID() {
+
+    function generateUUID()
+    {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
             mt_rand(0, 0xffff),
             mt_rand(0, 0x0fff) | 0x4000,
             mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
         );
     }
 }
