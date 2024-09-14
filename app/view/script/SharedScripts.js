@@ -402,6 +402,133 @@ async function countUsers(){
     return userCount;
 }
 
+async function getAllUsers(){
+    let users = []
+    const response = await fetch('http://localhost/Mediendatenbank/public/UserController/getAllUsers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const data = await response.json();
+    users = data;
+
+    return users;
+}
+
 async function loadDashboard(){
     const userCount = await countUsers();
+    const users = await getAllUsers();
+    const fetchPromises = [];
+    let photoCount = 0;
+    let videoCount = 0;
+    let ebookCount = 0;
+    let audiobookCount = 0;
+    let allKeyWordsCount = 0;
+
+    users.forEach(user => {
+        const fetchPromiseMedia = fetch('http://localhost/Mediendatenbank/public/MediumController/getMediaAmountPerUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: user.Benutzer_ID,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Object.keys(data.data).forEach(type => {
+                    const mediumCount = data.data[type][0]["COUNT(*)"];
+                    console.log(type + ' des Benutzers ' + user.Benutzer_ID + ": " + mediumCount);
+                    switch (type){
+                        case "Fotos":
+                            photoCount = photoCount + mediumCount;
+                            break;
+                        case "Videos":
+                            videoCount = videoCount + mediumCount;
+                            break;
+                        case "Ebooks":
+                            ebookCount = ebookCount + mediumCount;
+                            break;
+                        case "Hörbücher":
+                            audiobookCount = audiobookCount + mediumCount;
+                            break;
+                        default:
+                            console.log('Nicht unterstützter Type: ' + type);
+                            break;
+                    }
+                    })
+                
+            } else {
+                console.log('Fehler beim Laden der Medien des Benutzers ' + user.Benutzer_ID + ': ' + data.message);
+            }
+        })
+        .catch(error => console.error('Fehler beim Laden der Benutzermedien:', error));
+
+        const fetchPromiseKeyWords = fetch('http://localhost/Mediendatenbank/public/KeywordController/readKeywordPerUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: user.Benutzer_ID,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Object.keys(data.data).forEach(type => {
+                    const keywordCount = data.data["COUNT(Schlagwort_ID)"];
+
+                    allKeyWordsCount = allKeyWordsCount + keywordCount;
+
+                    console.log('Anzahl Schlagwörter des Benutzers ' + user.Benutzer_ID + ": " + keywordCount);
+                    
+                    })
+                
+            } else {
+                console.log('Fehler beim Laden der Medien des Benutzers ' + user.Benutzer_ID + ': ' + data.message);
+            }
+        })
+        .catch(error => console.error('Fehler beim Laden der Benutzermedien:', error));
+        
+        fetchPromises.push(fetchPromiseMedia);
+        fetchPromises.push(fetchPromiseKeyWords);
+    });
+    Promise.all(fetchPromises)
+        .then(() => {
+            const dbstatsarea = document.getElementById('dbStats');
+
+            const table = document.createElement('table');
+
+            // Tabellenkopf erstellen (Medientypen)
+            const header = table.createTHead();
+            const headerRow = header.insertRow(0); // Erste Zeile für die Spaltenüberschriften
+            const mediaTypes = ['Fotos', 'Videos', 'Ebooks', 'Hörbücher'];
+            mediaTypes.forEach((type) => {
+                const cell = document.createElement('th');
+                cell.textContent = type;
+                headerRow.appendChild(cell);
+            });
+
+            // Tabellenkörper erstellen und die Zähler für die Medien-Daten einfügen
+            const tbody = table.createTBody();
+            const valueRow = tbody.insertRow(); // Zeile für die Zählerwerte
+            const counts = [photoCount, videoCount, ebookCount, audiobookCount];
+            counts.forEach(count => {
+                const cell = valueRow.insertCell();
+                cell.textContent = count;
+            });
+
+            dbstatsarea.innerHTML = ''; // Leere das Div zuerst
+            dbstatsarea.appendChild(table);
+
+            console.log('Medien gesamt nach Typ: Fotos: ' + photoCount + ', Videos: ' + videoCount + ', Ebooks: ' + ebookCount + ', Hörbücher: ' + audiobookCount);
+            console.log('Anzahl aller Schlagwörter: ' + allKeyWordsCount);
+        })
+        .catch(error => {
+            console.error('Ein Fehler ist aufgetreten:', error);
+        });
 }
