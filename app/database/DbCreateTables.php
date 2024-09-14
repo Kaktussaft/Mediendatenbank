@@ -71,7 +71,7 @@ if ($conn->query($sql) === TRUE) {
 $sql = "CREATE TABLE Ebooks (
     ebook_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
-    Dateipfad varchar(50), 
+    Dateipfad varchar(80), 
     Typ varchar(10) not null, 
     Dateigröße varchar(20) not null, 
     Hochlade_datum date not null, 
@@ -94,7 +94,7 @@ if ($conn->query($sql) === TRUE) {
 $sql = "CREATE TABLE Hörbücher (
     Hörbuch_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
-    Dateipfad varchar(50), 
+    Dateipfad varchar(80), 
     Typ varchar(10) not null, 
     Dateigröße varchar(20) not null, 
     Hochlade_datum date not null, 
@@ -117,7 +117,7 @@ if ($conn->query($sql) === TRUE) {
 $sql = "CREATE TABLE Videos (
     Video_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
-    Dateipfad varchar(50), 
+    Dateipfad varchar(80), 
     Typ varchar(10) not null, 
     Dateigröße varchar(20) not null, 
     Hochlade_datum date not null, 
@@ -140,7 +140,7 @@ if ($conn->query($sql) === TRUE) {
 $sql = "CREATE TABLE Fotos (
     Foto_ID CHAR(36) PRIMARY KEY,
     Titel varchar(30) not null, 
-    Dateipfad varchar(50), 
+    Dateipfad varchar(80), 
     Typ varchar(10) not null, 
     Dateigröße varchar(20) not null, 
     Hochlade_datum date not null,
