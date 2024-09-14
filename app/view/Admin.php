@@ -28,9 +28,10 @@
         <button id="open-accountModification-modal">Nutzerverwaltung</button>
     </div>
     <div class="contentArea">
-        <h2>Datenbank-Statistik</h2>
+        <h2>Datenbank-Statistik</h2><br>
         <div id="dbStats"></div>
-        <h2>User-Statistik</h2>
+        <br>
+        <h2>User-Statistik</h2><br>
         <div id="userStats"></div>
     </div>
 
@@ -78,7 +79,6 @@
             });
 
             document.getElementById('navDashboard').addEventListener('click', function(event){
-                countUsers();
                 loadDashboard();
             });
 
