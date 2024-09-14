@@ -72,7 +72,7 @@ class MediumController extends Controller
 
                         switch ($fileType) {
                             case 'photo':
-                                $this->mediumRepository->createPhotoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, $fileResolution, $this->currentUserId);
+                                $this->mediumRepository->createPhotoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', $this->currentUserId);
                                 break;
                             case 'video':
                                 $this->mediumRepository->createVideoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
@@ -103,7 +103,7 @@ class MediumController extends Controller
     public function getAllMediums() //take in title as search param
     {
         try {
-            $media = $this->mediumRepository->readAllMedia($this->currentUserId);
+            $media = $this->mediumRepository->readAllMedia($this->currentUserId, $this->data['direction'], $this->data['sortingParameter']);
             echo json_encode(['status' => 'success', 'data' => $media]); //returns: Photos, Videos, Audiobooks, Ebooks in that order for current user
         } catch (Exception $e) {
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
