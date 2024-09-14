@@ -24,11 +24,14 @@
     </div>
     
     <div class="navigationPanel">
-        <button onclick="test2('hier wird navigiert')">Dashboard</button>
+        <button id="navDashboard">Dashboard</button>
         <button id="open-accountModification-modal">Nutzerverwaltung</button>
     </div>
     <div class="contentArea">
-        Hier kommt der Content hin
+        <h2>Datenbank-Statistik</h2>
+        <div id="dbStats"></div>
+        <h2>User-Statistik</h2>
+        <div id="userStats"></div>
     </div>
 
     <div id="accountModificationModal" class="modal">
@@ -72,6 +75,11 @@
                 event.preventDefault();
                 history.replaceState(null, '', '/Mediendatenbank/public/UserController/logout/');
                 window.location.reload();
+            });
+
+            document.getElementById('navDashboard').addEventListener('click', function(event){
+                countUsers();
+                loadDashboard();
             });
 
             document.getElementById('modifyUserButton').addEventListener('click', function(event) {

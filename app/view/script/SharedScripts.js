@@ -387,3 +387,21 @@ function loadUsers(listId){
         
         })
 }
+
+async function countUsers(){
+    let userCount = 0;
+    const response = await fetch('http://localhost/Mediendatenbank/public/UserController/getAllUsers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const data = await response.json();
+    userCount = data.length;
+
+    return userCount;
+}
+
+async function loadDashboard(){
+    const userCount = await countUsers();
+}
