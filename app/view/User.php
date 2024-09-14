@@ -123,11 +123,11 @@ $isAdmin = $data['isAdmin'];
         <div class="modal-content">
             <span class="close" id="close-modifySingleKeyWord-modal">&times;</span>
             <h2>Schlagwort bearbeiten</h2>
-            <form id="keyWordModificationForm" action="http://localhost/Mediendatenbank/public/KeywordController/modifyKeyword" method="post" enctype="multipart/form-data">
+            <div id="modifySingleKeyWordInfo">
                 <select name="keyWordSelection" id="keyWordSelection"></select><br>
-                <input type="text" id="keyWordName" name="keyWordName" placeholder="Neuen Namen eingeben" required><br>
-                <input type="submit" value="Absenden">
-            </form>
+                <input type="text" id="newKeyWordName" name="newKeyWordName" placeholder="Neuen Namen eingeben" required><br>
+                <button id="modifySingleKeyWordButton">Absenden</button>
+            </div>
         </div>
     </div>
 
@@ -147,6 +147,8 @@ $isAdmin = $data['isAdmin'];
             initModal('modifyKeyWordModal', 'open-modifykeyword-modal', 'close-modifykeyword-modal');
             initModal('modifySingleKeyWordModal', 'open-modifySingleKeyWord-modal', 'close-modifySingleKeyWord-modal')
             initModal('newKeyWordModal', 'open-newKeyWord-modal', 'close-newKeyWord-modal');
+
+            loadAll();
 
             const responseWindow = document.getElementById('responseWindow');
             responseWindow.addEventListener('load', function(){
@@ -196,9 +198,17 @@ $isAdmin = $data['isAdmin'];
                 
             });
 
+            document.getElementById('modifySingleKeyWordButton').addEventListener('click', function(event) {
+                const keyWordId = document.getElementById('keyWordSelection').value;
+                const keyWordName = document.getElementById('newKeyWordName').value;
+                updateKeyWord(keyWordId, keyWordName);
+            });
+
             document.getElementById('modifyUserButton').addEventListener('click', function(event) {
                 updateUserNonAdmin();
             });
+
+            
             
             refreshKeyWords();
 

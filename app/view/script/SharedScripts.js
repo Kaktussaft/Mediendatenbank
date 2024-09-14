@@ -95,7 +95,7 @@ function deleteUser(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            deleteUser: deleteUser,
+            username: deleteUser,
         })
     })
     .then(response => response.json())
@@ -316,6 +316,28 @@ function createKeyWord(keyWordName) {
     //    }
     //})
     .catch(error => console.error('Fehler beim Anlegen des Schlagworts:', error));
+}
+
+function updateKeyWord(keyWordId, newKeyWordName){
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/updateKeyword/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            keywordId: keyWordId,
+            keywordName: newKeyWordName,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Schlagwort erfolgreich bearbeitet.');
+        } else {
+            alert('Fehler beim Bearbeiten des Schlagworts: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Fehler beim Bearbeiten des Schlagworts:', error));
 }
 
 function deleteKeyword(keywordId){
