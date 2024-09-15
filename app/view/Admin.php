@@ -79,7 +79,11 @@
             });
 
             document.getElementById('navDashboard').addEventListener('click', function(event){
+<<<<<<< HEAD
                 await loadDashboard();
+=======
+                loadDashboard();
+>>>>>>> 9e3a3bc073a436082c68f4401ea2f32067b5b820
             });
 
             document.getElementById('modifyUserButton').addEventListener('click', function(event) {
