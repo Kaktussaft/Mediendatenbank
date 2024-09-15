@@ -49,17 +49,17 @@ $isAdmin = $data['isAdmin'];
     <div class="content">
         <div class="sortAndFilter">
             <div class="sorting">
-                <form onchange="script/SortResults.js" class="sortingForm">
+                <form onchange="loadAll()" class="sortingForm">
                     <div class="sortSelection">
                         <select name="sortingcriteria" id="sortingcriteria" class="sortCriteria">
-                            <option selected>Name</option>
-                            <option>Erstellungsdatum</option>
-                            <option>Größe</option>
+                            <option value='Titel' selected>Titel</option>
+                            <option value='Hochlade_datum'>Erstellungsdatum</option>
+                            <option value='Dateigröße'>Größe</option>
                         </select>
                     </div>
                     <div class="sortRadios">
-                        <input type="radio" name="sortingorder" value="up" checked>aufsteigend<br>
-                        <input type="radio" name="sortingorder" value="down">absteigend
+                        <input type="radio" name="sortingorder" value="ASC" checked>aufsteigend<br>
+                        <input type="radio" name="sortingorder" value="DESC">absteigend
                     </div>
                 </form>
             </div>
@@ -190,9 +190,9 @@ $isAdmin = $data['isAdmin'];
             });
 
             document.getElementById('createKeyWordButton').addEventListener('click', function(event) {
-                const keyWordName = document.getElementById('createKeyWordName').value;
-                if (keyWordName != ""){
-                    createKeyWord(keyWordName);
+                const keywordName = document.getElementById('createKeyWordName').value;
+                if (keywordName != ""){
+                    createKeyWord(keywordName);
                     refreshKeyWords();
                 }
                 
