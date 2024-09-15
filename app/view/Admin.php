@@ -79,7 +79,7 @@
             });
 
             document.getElementById('navDashboard').addEventListener('click', function(event){
-                loadDashboard();
+                await loadDashboard();
             });
 
             document.getElementById('modifyUserButton').addEventListener('click', function(event) {
