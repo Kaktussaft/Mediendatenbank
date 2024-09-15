@@ -99,7 +99,6 @@ class KeywordRepository
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
-        $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
             $amount[] = $row;
         }

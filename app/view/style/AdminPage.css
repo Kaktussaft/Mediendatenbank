@@ -60,9 +60,9 @@ html, body {
 
 .contentArea{
     display: flex;
+    flex-direction: column;
     border: 2px solid #02BFBF;
     margin-top: 20px;
-    flex-grow: 1;
     background-color: rgba(0, 0, 0, 0.7);
     min-height: calc(100vh - 400px);
 }

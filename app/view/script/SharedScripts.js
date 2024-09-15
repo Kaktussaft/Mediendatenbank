@@ -107,12 +107,31 @@ function deleteUser(){
         });
 }
 
+function getSorting(){
+    let sorting = {};
+
+    const parameter = document.getElementById('sortingcriteria').value;
+    const order = document.querySelector('input[name="sortingorder"]:checked').value
+    
+    sorting.parameter = parameter;
+    sorting.order = order;
+
+    return sorting;
+}
+
 function loadAll(){
+    const sortingParameter = getSorting().parameter;
+    const sortingOrder = getSorting().order;
+
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            sortingParameter: sortingParameter,
+            direction: sortingOrder,
+        })
     })
         .then(response => response.json())
         .then(data => {
@@ -133,11 +152,18 @@ function loadAll(){
 }
 
 function loadPhotos() {
+    const sortingParameter = getSorting().parameter;
+    const sortingOrder = getSorting().order;
+
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            sortingParameter: sortingParameter,
+            direction: sortingOrder,
+        })
     })
         .then(response => response.json())
         .then(data => {
@@ -156,11 +182,18 @@ function loadPhotos() {
 }
 
 function loadVideos() {
+    const sortingParameter = getSorting().parameter;
+    const sortingOrder = getSorting().order;
+
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            sortingParameter: sortingParameter,
+            direction: sortingOrder,
+        })
     })
         .then(response => response.json())
         .then(data => {
@@ -179,11 +212,18 @@ function loadVideos() {
 }
 
 function loadEbooks() {
+    const sortingParameter = getSorting().parameter;
+    const sortingOrder = getSorting().order;
+
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            sortingParameter: sortingParameter,
+            direction: sortingOrder,
+        })
     })
         .then(response => response.json())
         .then(data => {
@@ -202,11 +242,18 @@ function loadEbooks() {
 }
 
 function loadAudioBooks() {
+    const sortingParameter = getSorting().parameter;
+    const sortingOrder = getSorting().order;
+
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            sortingParameter: sortingParameter,
+            direction: sortingOrder,
+        })
     })
         .then(response => response.json())
         .then(data => {
@@ -299,12 +346,15 @@ function refreshKeyWords(){
     loadKeyWords('keyWordSelection', 'select', false);
 }
 
-function createKeyWord(keyWordName) {
-    fetch('http://localhost/Mediendatenbank/public/KeywordController/createKeyword/' + keyWordName, {
+function createKeyWord(keywordName) {
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/createKeyword', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+            keywordName: keywordName,
+        })
     })
     //.then(response => response.json())
     //.then(data => {
@@ -386,4 +436,197 @@ function loadUsers(listId){
             });
         
         })
+}
+
+async function countUsers(){
+    let userCount = 0;
+    const response = await fetch('http://localhost/Mediendatenbank/public/UserController/getAllUsers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const data = await response.json();
+    userCount = data.length;
+
+    return userCount;
+}
+
+async function getAllUsers(){
+    let users = []
+    const response = await fetch('http://localhost/Mediendatenbank/public/UserController/getAllUsers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const data = await response.json();
+    users = data;
+
+    return users;
+}
+
+async function loadDashboard(){
+    const userCount = await countUsers();
+    const users = await getAllUsers();
+    const fetchPromises = [];
+    const dbstatsarea = document.getElementById('dbStats');
+    const userstatsarea = document.getElementById('userStats');
+    let photoCount = 0;
+    let photoCountUser = 0;
+    let videoCount = 0;
+    let videoCountUser = 0;
+    let ebookCount = 0;
+    let ebookCountUser = 0;
+    let audiobookCount = 0;
+    let audiobookCountUser = 0;
+    let allKeyWordsCount = 0;
+    let keyWordCountUser = 0;
+    const userMediaCounts = [];
+
+    users.forEach(user => {
+        photoCountUser = 0;
+        videoCountUser = 0;
+        ebookCountUser = 0;
+        audiobookCountUser = 0;
+        keyWordCountUser = 0;
+
+        const fetchPromiseMedia = fetch('http://localhost/Mediendatenbank/public/MediumController/getMediaAmountPerUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: user.Benutzer_ID,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Object.keys(data.data).forEach(type => {
+                    const mediumCount = data.data[type][0]["COUNT(*)"];
+                    console.log(type + ' des Benutzers ' + user.Benutzer_ID + ": " + mediumCount);
+                    switch (type){
+                        case "Fotos":
+                            photoCount = photoCount + mediumCount;
+                            photoCountUser = mediumCount;
+                            break;
+                        case "Videos":
+                            videoCount = videoCount + mediumCount;
+                            videoCountUser = mediumCount;
+                            break;
+                        case "Ebooks":
+                            ebookCount = ebookCount + mediumCount;
+                            ebookCountUser = mediumCount;
+                            break;
+                        case "Hörbücher":
+                            audiobookCount = audiobookCount + mediumCount;
+                            audiobookCountUser = mediumCount;
+                            break;
+                        default:
+                            console.log('Nicht unterstützter Type: ' + type);
+                            break;
+                    }
+                    })
+                
+            } else {
+                console.log('Fehler beim Laden der Medien des Benutzers ' + user.Benutzer_ID + ': ' + data.message);
+            }
+        })
+        .catch(error => console.error('Fehler beim Laden der Benutzermedien:', error));
+
+        const fetchPromiseKeyWords = fetch('http://localhost/Mediendatenbank/public/KeywordController/readKeywordPerUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: user.Benutzer_ID,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                    const keywordCount = data.data[0]["COUNT(Schlagwort_ID)"];
+
+                    allKeyWordsCount = allKeyWordsCount + keywordCount;
+                    keyWordCountUser = keywordCount;
+                
+            } else {
+                console.log('Fehler beim Laden der Medien des Benutzers ' + user.Benutzer_ID + ': ' + data.message);
+            }
+        })
+        .catch(error => console.error('Fehler beim Laden der Benutzermedien:', error));
+        
+        fetchPromises.push(
+            Promise.all([fetchPromiseMedia, fetchPromiseKeyWords]).then(() => {
+                userMediaCounts.push({
+                    username: user.Benutzername,
+                    photoCountUser,
+                    videoCountUser,
+                    ebookCountUser,
+                    audiobookCountUser,
+                    keyWordCountUser
+                });
+            })
+        );
+    });
+    Promise.all(fetchPromises)
+        .then(() => {
+            const table = document.createElement('table');
+
+            // Tabellenkopf erstellen (Medientypen)
+            const header = table.createTHead();
+            const headerRow = header.insertRow(0); // Erste Zeile für die Spaltenüberschriften
+            const headers = ['Fotos', 'Videos', 'Ebooks', 'Hörbücher', 'Schlagwörter'];
+            headers.forEach((type) => {
+                const cell = document.createElement('th');
+                cell.textContent = type;
+                headerRow.appendChild(cell);
+            });
+
+            // Tabellenkörper erstellen und die Zähler für die Medien-Daten einfügen
+            const tbody = table.createTBody();
+            const valueRow = tbody.insertRow(); // Zeile für die Zählerwerte
+            const counts = [photoCount, videoCount, ebookCount, audiobookCount, allKeyWordsCount];
+            counts.forEach(count => {
+                const cell = valueRow.insertCell();
+                cell.textContent = count;
+            });
+
+            dbstatsarea.innerHTML = ''; // Leere das Div zuerst
+            dbstatsarea.appendChild(table);
+
+            console.log('Medien gesamt nach Typ: Fotos: ' + photoCount + ', Videos: ' + videoCount + ', Ebooks: ' + ebookCount + ', Hörbücher: ' + audiobookCount);
+            console.log('Anzahl aller Schlagwörter: ' + allKeyWordsCount);
+
+            const userTable = document.createElement('table');
+            const userHeader = userTable.createTHead();
+            const userHeaderRow = userHeader.insertRow(0);
+
+            // Tabellenkopf erstellen
+            ['Username', 'Fotos', 'Videos', 'Ebooks', 'Hörbücher', 'Schlagwörter'].forEach(type => {
+                const cell = document.createElement('th');
+                cell.textContent = type;
+                userHeaderRow.appendChild(cell);
+            });
+
+            const userBody = userTable.createTBody();
+            userMediaCounts.forEach(userData => {
+                const row = userBody.insertRow();
+                const usernameCell = row.insertCell();
+                usernameCell.textContent = userData.username;
+
+                [userData.photoCountUser, userData.videoCountUser, userData.ebookCountUser, userData.audiobookCountUser, userData.keyWordCountUser].forEach(count => {
+                    const cell = row.insertCell();
+                    cell.textContent = count;
+                });
+            });
+
+            userstatsarea.innerHTML = ''; // Vorherige Inhalte leeren
+            userstatsarea.appendChild(userTable);
+        })
+        .catch(error => {
+            console.error('Ein Fehler ist aufgetreten:', error);
+        });
 }
