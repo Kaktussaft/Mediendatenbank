@@ -100,15 +100,18 @@ class MediumController extends Controller
     }
 
 
-    public function getAllMediums() //take in title as search param
+    public function getAllMediums()
     {
+        $searchParameter = $this->data['searchParameter'] ?? '';
         try {
-            $media = $this->mediumRepository->readAllMedia($this->currentUserId, $this->data['direction'], $this->data['sortingParameter']);
+            $media = $this->mediumRepository->readAllMedia($this->currentUserId, $this->data['direction'], $this->data['sortingParameter'], $searchParameter);
             echo json_encode(['status' => 'success', 'data' => $media]); //returns: Photos, Videos, Audiobooks, Ebooks in that order for current user
         } catch (Exception $e) {
             echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
+
+
 
     public function updateMediums($medium)
     {
