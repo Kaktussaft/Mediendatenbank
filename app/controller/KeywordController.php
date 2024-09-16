@@ -65,10 +65,11 @@ class KeywordController extends Controller
         echo json_encode(['status' => 'success', 'data' => $keywordsAndAssociations]);
     }
 
-    public function deleteKeyword(int $keywordId)
+    public function deleteKeyword()
     {
         $keywordId = $this->data['keywordId'] ?? 0;
         $this->keywordRepository->deleteKeyword($keywordId);
+        echo json_encode(['status' => 'success']);
     }
 
     public function readKeywordPerUser()

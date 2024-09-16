@@ -202,7 +202,7 @@ function loadVideos() {
             const videos = data.data['Videos'];
 
             videos.forEach(video => {
-                const vid = document.createElement('vid');
+                const vid = document.createElement('video');
                 vid.src = video.Dateipfad;
                 vid.alt = video.Titel;
                 contentContainer.appendChild(vid);
@@ -369,7 +369,7 @@ function createKeyWord(keywordName) {
 }
 
 function updateKeyWord(keyWordId, newKeyWordName){
-    fetch('http://localhost/Mediendatenbank/public/KeywordController/updateKeyword/', {
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/updateKeyword', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -392,12 +392,16 @@ function updateKeyWord(keyWordId, newKeyWordName){
 
 function deleteKeyword(keywordId){
     if (confirm("Möchten Sie dieses Schlagwort wirklich löschen?")) {
-        fetch('http://localhost/Mediendatenbank/public/KeywordController/deleteKeyword/' + keywordId, {
+        fetch('http://localhost/Mediendatenbank/public/KeywordController/deleteKeyword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                keywordId: keywordId,
+            })
         })
+
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
