@@ -83,7 +83,7 @@ class MediumRepository
             $query = "SELECT * FROM $type WHERE Benutzer_ID = ?";
         
             if ($searchParameter) {
-                $query .= " AND Titel = ?";
+                $query .= " AND Titel = '%?%'";
             }
         
             $query .= " ORDER BY $sortingParamter $direction";
