@@ -165,6 +165,22 @@ function updateMedium(){
         .catch(error => console.error('Fehler beim Bearbeiten des Mediums:', error));
 }
 
+function deleteMedium(){
+    const mediumID = document.getElementById('modalMedium').value;
+
+    fetch('http://localhost/Mediendatenbank/public/MediumController/deleteMedium', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ID: mediumID,
+        })
+    })
+        .then(loadAll())
+        .catch(error => console.error('Fehler beim Löschen des Mediums:', error));
+}
+
 function loadAll(){
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;

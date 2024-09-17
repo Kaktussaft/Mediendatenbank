@@ -144,7 +144,7 @@ $isAdmin = $data['isAdmin'];
             <img class="modal-content" id="modalMedium">
             <div id="caption"></div><br>
             <form onchange="updateMediumAssociation()" id="mediumKeywords"></form>
-            <button id="deleteMedium">Medium löschen</button>
+            <button id="deleteMediumButton">Medium löschen</button>
         </div>
     </div>
 
@@ -231,6 +231,10 @@ $isAdmin = $data['isAdmin'];
 
             document.getElementById('modifyMediumButton').addEventListener('click', function(event) {
                 updateMedium();
+            });
+
+            document.getElementById('deleteMediumButton').addEventListener('click', function(event) {
+                deleteMedium();
             });
 
             
