@@ -22,7 +22,6 @@ class KeywordController extends Controller
         if (isset($_SESSION['currentUser']['Benutzer_ID'])) {
             $this->currentUserId = $_SESSION['currentUser']['Benutzer_ID'];
         } else {
-            throw new Exception("User is not logged in.");
         }
         $this->keywordRepository = new KeywordRepository();
 
