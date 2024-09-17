@@ -119,5 +119,6 @@ class KeywordRepository
             }
             $stmt->close();
         }
+        return $associations;
     }
 }
