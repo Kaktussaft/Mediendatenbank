@@ -48,9 +48,9 @@ class MediumRepository
     public function updateMedium( $id, $title)
     {
         $tableType = $this->getMediaTypeById($id);
-        $idQuery = $tableType . "_ID";
+        $idQuery = $this->nameConverterId($tableType);
         $stmt = $this->conn->prepare("UPDATE $tableType SET Titel = ? WHERE $idQuery  = ?");
-        $stmt->bind_param("si", $title, $id);
+        $stmt->bind_param("ss", $title, $id);
         $stmt->execute();
     }
 
@@ -113,14 +113,16 @@ class MediumRepository
     {
         $tables = ['Fotos', 'Videos', 'Hörbücher', 'Ebooks'];
         foreach ($tables as $table) {
-            $query = "SELECT filetype FROM $table WHERE id = ?";
+            $idQuery = rtrim($table, 's') . "_ID";
+            $query = "SELECT Typ FROM $table WHERE $idQuery = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param("s", $id);
             $stmt->execute();
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
                 $stmt->close();
-                return $row['filetype'];
+                $mediumtype = $row['Typ'];
+                return $this->nameConverterDbName($mediumtype);
             }
             $stmt->close();
         }
@@ -156,5 +158,34 @@ class MediumRepository
         }
 
         return $results;
+    }
+
+    public function nameConverterDbName($medium) //from english to db table name
+    {
+        switch
+        ($medium) {
+            case 'photo':
+                return 'Fotos';
+            case 'video':
+                return 'Videos';
+            case 'audiobook':
+                return 'Hörbucher';
+            case 'ebook':
+                return 'Ebooks';
+        }
+    }
+    public function nameConverterId($medium) //from db table name to id
+    {
+        switch
+        ($medium) {
+            case 'Fotos':
+                return 'Foto_ID';
+            case 'Video_ID':
+                return 'video';
+            case 'Hörbucher':
+                return 'Hörbuch_ID';
+            case 'Ebooks':
+                return 'ebook_ID';
+        }
     }
 }
