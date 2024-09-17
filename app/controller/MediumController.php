@@ -69,10 +69,11 @@ class MediumController extends Controller
 
                     if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
                         $filePath = '/Mediendatenbank/public/uploads/' . $fileType . '/' . basename($file['name']);
-
                         switch ($fileType) {
                             case 'photo':
-                                $this->mediumRepository->createPhotoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', $this->currentUserId);
+                                list($width, $height) = getimagesize($uploadFile);
+                                $fileResolution = $width . 'x' . $height;
+                                $this->mediumRepository->createPhotoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, $fileResolution, $this->currentUserId);
                                 break;
                             case 'video':
                                 $this->mediumRepository->createVideoMedium($mediaID, $fileName, $filePath, $fileType, $fileSize, $uploadDate, '', '', $this->currentUserId);
@@ -99,7 +100,6 @@ class MediumController extends Controller
         }
     }
 
-
     public function getAllMediums()
     {
         $searchParameter = $this->data['searchParameter'] ?? '';
@@ -111,22 +111,11 @@ class MediumController extends Controller
         }
     }
 
-
-
-    public function updateMediums($medium)
+    public function updateMedium()
     {
-        foreach ($medium as $key => $value) {
-            $id = $value['ID'];
-            $fileType = $value['Typ'];
-            $title = $value['Titel'];
-            $resolution = $value['Auflösung'];
-            $duration = $value['Dauer'];
-            $speaker = $value['Sprecher'];
-            $author = $value['Autor'];
-            $pages = $value['Seitenzahl'];
-
-            $this->mediumRepository->updateMedium($id, $fileType, $title, $resolution, $duration, $speaker, $author, $pages);
-        }
+        $id = $this->data['ID'];
+        $title = $this->data['Titel'];
+        $this->mediumRepository->updateMedium($id, $title);
     }
 
     public function getMediaAmountPerUser()
