@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Core\Controller;
 use App\Model\UserModel;
+use App\Controller\MediumController;
+use App\Controller\KeywordController;
 use App\Repository\UserRepository;
 use DateTime;
 
@@ -11,12 +13,16 @@ use DateTime;
 class UserController extends Controller
 {
     private $userRepository;
+    private $mediumController;
+    private $keywordController;
     private $currentUser;
 
     public function __construct()
     {
         session_start();
         $this->userRepository = new UserRepository();
+        $this->mediumController = new MediumController();
+        $this->keywordController = new KeywordController();
     }
 
     public function login($username = '')
@@ -143,10 +149,11 @@ class UserController extends Controller
     {
         $rawData = file_get_contents('php://input');
         $data = json_decode($rawData, true);
-
         if (json_last_error() === JSON_ERROR_NONE) {
-            $username = isset($data['username']) ? $data['username'] : '';
-            $this->userRepository->deleteUser($username);
+            $userId = isset($data['userId']) ? $data['userId'] : '';
+            $this->keywordController->deleteAllKeywordsAndAssociations($userId);
+            $this->mediumController->deleteAllMediaForUser($userId);
+            $this->userRepository->deleteUser($userId);
             echo json_encode(['statusMessage' => 'success', 'message' => 'Nutzer erfolgreich gelöscht']);
         } else {
             echo json_encode(['statusMessage' => 'error', 'message' => 'Invalid JSON data']);
