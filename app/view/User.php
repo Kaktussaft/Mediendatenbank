@@ -65,8 +65,6 @@ $isAdmin = $data['isAdmin'];
             </div>
             <div class="keywording">
                 <div class="keyWordList" id="keyWordList"></div>
-                <form action="">
-                </form>
                 <div class="modifyKeyWords">
                     <button id="open-modifykeyword-modal" class="modifyKeyWordButton">Schlagwörter bearbeiten...</button>
                 </div>
@@ -140,6 +138,27 @@ $isAdmin = $data['isAdmin'];
         </div>
     </div>
 
+    <div id="mediumModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-mediumModal">&times;</span>
+            <img class="modal-content" id="modalMedium">
+            <div id="caption"></div><br>
+            <form onchange="updateMediumAssociation()" id="mediumKeywords"></form>
+            <button id="deleteMediumButton">Medium löschen</button>
+        </div>
+    </div>
+
+    <div id="modifyMediumModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modifyMedium-modal">&times;</span>
+            <h2>Schlagwort bearbeiten</h2>
+            <div id="modifyMediumInfo">
+                <input type="text" id="newTitle" name="newTitle" placeholder="Neuen Titel eingeben"><br>
+                <button id="modifyMediumButton">Absenden</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             initModal('accountModificationModal', 'open-accountModification-modal', 'close-accountModification-modal');
@@ -147,9 +166,11 @@ $isAdmin = $data['isAdmin'];
             initModal('modifyKeyWordModal', 'open-modifykeyword-modal', 'close-modifykeyword-modal');
             initModal('modifySingleKeyWordModal', 'open-modifySingleKeyWord-modal', 'close-modifySingleKeyWord-modal')
             initModal('newKeyWordModal', 'open-newKeyWord-modal', 'close-newKeyWord-modal');
+            
+
 
             loadAll();
-
+            
             const responseWindow = document.getElementById('responseWindow');
             responseWindow.addEventListener('load', function(){
                 uploadModal.style.display = 'none';
@@ -206,6 +227,14 @@ $isAdmin = $data['isAdmin'];
 
             document.getElementById('modifyUserButton').addEventListener('click', function(event) {
                 updateUserNonAdmin();
+            });
+
+            document.getElementById('modifyMediumButton').addEventListener('click', function(event) {
+                updateMedium();
+            });
+
+            document.getElementById('deleteMediumButton').addEventListener('click', function(event) {
+                deleteMedium();
             });
 
             
