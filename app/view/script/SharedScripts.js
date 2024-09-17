@@ -119,6 +119,34 @@ function getSorting(){
     return sorting;
 }
 
+function openMedium(mediumSrc, title, mediumID) {
+    const modal = document.getElementById('mediumModal');
+    const modalMedium = document.getElementById('modalMedium');
+    const caption = document.getElementById('caption');
+    const closeModalButton = document.getElementById('close-mediumModal');
+    
+
+    modal.style.display = 'block'; // Modal anzeigen
+    modalMedium.src = mediumSrc; // Setze das Bild im Modal
+    modalMedium.value = mediumID;
+    caption.innerHTML = title; // Setze den Bildtitel im Modal
+
+    const modifyButton = document.createElement('button');
+    modifyButton.textContent = 'Bearbeiten';
+    modifyButton.id = 'open-modifyMedium-modal'
+    caption.appendChild(modifyButton);
+
+    closeModalButton.addEventListener('click', () => {
+        modal.style.display = 'none'; // Versteckt das Modal
+    });
+    // Schließen des Modals bei Klick außerhalb des Bildes
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none'; // Modal verstecken
+        }
+    };
+}
+
 function loadAll(){
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
@@ -140,10 +168,34 @@ function loadAll(){
             Object.keys(data.data).forEach(type => {
                 const mediaTypeList = data.data[type];
                 mediaTypeList.forEach(medium => {
+                    
                     const element = document.createElement('img');
-                    element.src = medium.Dateipfad;  // Assuming 'Dateipfad' is the column for the file path
-                    element.alt = medium.Titel || 'Kein Titel';  // Optional alt text
+                    switch (type){
+                        case 'Fotos':
+                            element.src = medium.Dateipfad;
+                            element.id = medium.Foto_ID;
+                            break;
+                        case 'Videos':
+                            element.src = '/Mediendatenbank/public/placeholders/placeholder_video.jpg';
+                            element.id = medium.Video_ID;
+                            break;
+                        case 'Ebooks':
+                            element.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.jpg';
+                            element.id = medium.ebook_ID;
+                            break;
+                        case 'Hörbücher':
+                            element.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.jpg';
+                            element.id = medium.Hörbuch_ID;
+                            break;
+                    }
+                    
+                    element.alt = medium.Titel || 'Kein Titel';
                     contentArea.appendChild(element);
+
+                    element.addEventListener('click', function() {
+                        openMedium(medium.Dateipfad, medium.Titel || 'Kein Titel', element.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
                 })
             });
             
@@ -202,8 +254,8 @@ function loadVideos() {
             const videos = data.data['Videos'];
 
             videos.forEach(video => {
-                const vid = document.createElement('vid');
-                vid.src = video.Dateipfad;
+                const vid = document.createElement('img');
+                vid.src = '/Mediendatenbank/public/placeholders/placeholder_video.jpg';
                 vid.alt = video.Titel;
                 contentContainer.appendChild(vid);
             });
@@ -232,8 +284,8 @@ function loadEbooks() {
             const ebooks = data.data['Ebooks'];
 
             ebooks.forEach(ebook => {
-                const ebk = document.createElement('ebk');
-                ebk.src = ebook.Dateipfad;
+                const ebk = document.createElement('img');
+                ebk.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.jpg';
                 ebk.alt = ebook.Titel;
                 contentContainer.appendChild(ebk);
             });
@@ -262,8 +314,8 @@ function loadAudioBooks() {
             const audiobooks = data.data['Hörbücher'];
 
             audiobooks.forEach(audiobook => {
-                const abk = document.createElement('abk');
-                abk.src = audiobook.Dateipfad;
+                const abk = document.createElement('img');
+                abk.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.jpg';
                 abk.alt = audiobook.Titel;
                 contentContainer.appendChild(abk);
             });
@@ -344,6 +396,7 @@ function refreshKeyWords(){
     loadKeyWords('keyWordList', 'checkbox', false);
     loadKeyWords('modifyKeyWordList', 'checkbox', true);
     loadKeyWords('keyWordSelection', 'select', false);
+    loadKeyWords('mediumKeywords', 'checkbox', false);
 }
 
 function createKeyWord(keywordName) {
@@ -369,7 +422,7 @@ function createKeyWord(keywordName) {
 }
 
 function updateKeyWord(keyWordId, newKeyWordName){
-    fetch('http://localhost/Mediendatenbank/public/KeywordController/updateKeyword/', {
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/updateKeyword', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -392,11 +445,14 @@ function updateKeyWord(keyWordId, newKeyWordName){
 
 function deleteKeyword(keywordId){
     if (confirm("Möchten Sie dieses Schlagwort wirklich löschen?")) {
-        fetch('http://localhost/Mediendatenbank/public/KeywordController/deleteKeyword/' + keywordId, {
+        fetch('http://localhost/Mediendatenbank/public/KeywordController/deleteKeyword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                keywordId: keywordId,
+            })
         })
         .then(response => response.json())
         .then(data => {
