@@ -125,6 +125,15 @@ class MediumController extends Controller
         echo json_encode(['status' => 'success', 'data' => $result]);
     }
 
+    public function deleteAllMediaForUser($userId)
+    {
+        $allMediaIdsForUser = $this->mediumRepository->getAllMediaIdsPerUser($userId);
+        
+        foreach($allMediaIdsForUser as $mediaId) {
+            $this->mediumRepository->deleteMedium($mediaId);
+        }
+    }
+
     private function determineMediaType($fileName)
     {
         $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
