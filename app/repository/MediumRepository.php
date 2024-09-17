@@ -45,32 +45,13 @@ class MediumRepository
         $stmt->close();
     }
 
-    public function deleteMedium(int $id, string $type) {}
-
-    public function updateMedium(int $id, $fileType, $title, $resolution = '', $duration = '', $speaker = '', $author = '', $pages = '')
+    public function updateMedium(int $id, $title)
     {
-        switch ($fileType) {
-            case 'photo';
-                $stmt = $this->conn->prepare("UPDATE Fotos SET Titel = ?,  Auflösung = ? WHERE ID = ?");
-                $stmt->bind_param("ssi", $title, $resolution, $id);
-                $stmt->execute();
-                $stmt->close();
-            case 'video';
-                $stmt = $this->conn->prepare("UPDATE Fotos SET Titel = ?, Auflösung = ?, Dauer = ? WHERE ID = ?");
-                $stmt->bind_param("sssi", $title, $resolution, $duration, $id);
-                $stmt->execute();
-                $stmt->close();
-            case 'audiobook';
-                $stmt = $this->conn->prepare("UPDATE Fotos SET Titel = ?, Sprecher = ?, Dauer = ? WHERE ID = ?");
-                $stmt->bind_param("sssi", $title, $speaker, $duration, $id);
-                $stmt->execute();
-                $stmt->close();
-            case 'ebook';
-                $stmt = $this->conn->prepare("UPDATE Fotos SET Titel = ?, Autor = ?, Seitenzahl = ? WHERE ID = ?");
-                $stmt->bind_param("ssii", $title, $author, $pages, $id);
-                $stmt->execute();
-                $stmt->close();
-        }
+        $tableType = $this->getMediaTypeById($id);
+        $idQuery = $tableType . "_ID";
+        $stmt = $this->conn->prepare("UPDATE $tableType SET Titel = ? WHERE $idQuery  = ?");
+        $stmt->bind_param("ss", $title, $id);
+        $stmt->execute();
     }
 
     public function readAllMedia($currentUserId, $direction, $sortingParamter, $searchParameter) //sort asc/desc/size/date
@@ -81,20 +62,20 @@ class MediumRepository
         foreach ($mediaTypes as $type) {
 
             $query = "SELECT * FROM $type WHERE Benutzer_ID = ?";
-        
+
             if ($searchParameter) {
                 $query .= " AND Titel = '%?%'";
             }
-        
+
             $query .= " ORDER BY $sortingParamter $direction";
             $stmt = $this->conn->prepare($query);
-        
+
             if ($searchParameter) {
                 $stmt->bind_param("ss", $currentUserId, $searchParameter);
             } else {
                 $stmt->bind_param("s", $currentUserId);
             }
-        
+
             $stmt->execute();
             $result = $stmt->get_result();
             $mediaData = [];
@@ -127,5 +108,22 @@ class MediumRepository
         }
 
         return $results;
+    }
+    public function getMediaTypeById($id)
+    {
+        $tables = ['Fotos', 'Videos', 'Hörbücher', 'Ebooks'];
+        foreach ($tables as $table) {
+            $query = "SELECT filetype FROM $table WHERE id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $stmt->close();
+                return $row['filetype'];
+            }
+            $stmt->close();
+        }
+        return null;
     }
 }
