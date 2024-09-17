@@ -157,7 +157,7 @@ html, body {
     border: 1px solid #ccc;
 }
 
-button:hover{
+button:hover, img:hover{
     cursor: pointer;
 }
 
