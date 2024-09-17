@@ -132,7 +132,7 @@ class MediumRepository
     public function deleteMedium($id)
     {
         $tablename = $this->getMediaTypeById($id);
-        $idQuery = $tablename . "_ID";
+        $idQuery = $this->nameConverterId($tablename);
         $stmt = $this->conn->prepare("DELETE FROM $tablename WHERE $idQuery = ?");
         $stmt->bind_param("s", $id);
         $stmt->execute();
