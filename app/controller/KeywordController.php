@@ -52,7 +52,7 @@ class KeywordController extends Controller
         $this->keywordRepository->assignKeywordToMedia($keywordId, $mediumId);
     }
 
-    public function deleteAssociation(int $keywordId, int $mediumId)
+    public function deleteAssociation()
     {
         $keywordId = $this->data['keywordId'] ?? 0;
         $mediumId = $this->data['mediumId'] ?? 0;
@@ -65,7 +65,7 @@ class KeywordController extends Controller
         echo json_encode(['status' => 'success', 'data' => $keywordsAndAssociations]);
     }
 
-    public function deleteKeyword(int $keywordId)
+    public function deleteKeyword()
     {
         $keywordId = $this->data['keywordId'] ?? 0;
         $this->keywordRepository->deleteKeyword($keywordId);
