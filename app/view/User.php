@@ -229,6 +229,10 @@ $isAdmin = $data['isAdmin'];
                 updateUserNonAdmin();
             });
 
+            document.getElementById('modifyMediumButton').addEventListener('click', function(event) {
+                updateMedium();
+            });
+
             
             
             refreshKeyWords();

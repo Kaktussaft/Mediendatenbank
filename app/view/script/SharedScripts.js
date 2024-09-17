@@ -147,6 +147,24 @@ function openMedium(mediumSrc, title, mediumID) {
     };
 }
 
+function updateMedium(){
+    const mediumID = document.getElementById('modalMedium').value;
+    const mediumTitle = document.getElementById('newTitle').value;
+
+    fetch('http://localhost/Mediendatenbank/public/MediumController/updateMedium', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            ID: mediumID,
+            Titel: mediumTitle,
+        })
+    })
+        .then(loadAll())
+        .catch(error => console.error('Fehler beim Bearbeiten des Mediums:', error));
+}
+
 function loadAll(){
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
