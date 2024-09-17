@@ -125,6 +125,12 @@ class MediumController extends Controller
         echo json_encode(['status' => 'success', 'data' => $result]);
     }
 
+    public function deleteMedium()
+    {
+        $mediaId = $this->data['ID'];
+        $this->mediumRepository->deleteMedium($mediaId);
+    }
+
     public function deleteAllMediaForUser($userId)
     {
         $allMediaIdsForUser = $this->mediumRepository->getAllMediaIdsPerUser($userId);
