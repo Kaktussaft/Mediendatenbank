@@ -78,4 +78,19 @@ class KeywordController extends Controller
         echo json_encode(['status' => 'success', 'data' => $keywordsPerUser]);
     }
 
+    public function deleteAllKeywordsAndAssociations($userId)
+    {
+        $data = $this->keywordRepository->readAllKeywordsWithAssociations($userId);
+        $keywords = $data['keywords'];
+        $associations = $data['associations'];
+
+        foreach ($associations as $association) {
+            $this->keywordRepository->removeKeywordFromMedia($association['Schlagwort_ID'], $association['Medium_ID']);
+        }
+        
+        foreach ($keywords as $keyword) {
+            $this->keywordRepository->deleteKeyword($keyword['Schlagwort_ID']);
+        }
+    }
+
 }
