@@ -157,12 +157,6 @@ html, body {
     border: 1px solid #ccc;
 }
 
-.contentArea video{
-    width: 150px;
-    margin: 10px;
-    border: 1px solid #ccc;
-}
-
 button:hover{
     cursor: pointer;
 }
