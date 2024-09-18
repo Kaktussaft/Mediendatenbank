@@ -143,7 +143,7 @@ $isAdmin = $data['isAdmin'];
             <span class="close" id="close-mediumModal">&times;</span>
             <img class="modal-content" id="modalMedium">
             <div id="caption"></div><br>
-            <form onchange="updateMediumAssociation()" id="mediumKeywords"></form>
+            <form id="mediumKeywords"></form>
             <button id="deleteMediumButton">Medium löschen</button>
         </div>
     </div>
