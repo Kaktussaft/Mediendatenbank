@@ -98,5 +98,4 @@ class KeywordController extends Controller
             $this->keywordRepository->deleteKeyword($keyword['Schlagwort_ID']);
         }
     }
-
 }

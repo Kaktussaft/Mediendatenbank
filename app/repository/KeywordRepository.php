@@ -3,14 +3,17 @@
 namespace App\Repository;
 
 use App\database\DbConnection;
+use App\Repository\MediumRepository;
 use App\Model\KeywordModel;
 
 class KeywordRepository
 {
 
     private $conn;
+    private $mediumRepository;
     public function __construct()
     {
+        $this->mediumRepository = new MediumRepository();
         $this->conn = DbConnection::getInstance()->getConnection();
     }
 
@@ -78,17 +81,20 @@ class KeywordRepository
 
     public function assignKeywordToMedia($keywordId, $mediaId)
     {
-
-        $stmt = $this->conn->prepare("INSERT INTO SchlagwortMedien (Schlagwort_ID, Medium_ID) VALUES (?, ?)");
-        $stmt->bind_param("ss", $keywordId, $mediaId);
+        $getMediaType = $this->mediumRepository->getMediaTypeById($mediaId);
+        $columnName = $this->mediumRepository->nameConverterId($getMediaType);
+        $stmt = $this->conn->prepare("INSERT INTO SchlagwortMedien (Schlagwort_ID, $columnName) VALUES (?, ?)");
+        $stmt->bind_param("is", $keywordId, $mediaId);
         $stmt->execute();
         $stmt->close();
     }
 
     public function removeKeywordFromMedia($keywordId, $mediaId)
     {
-        $stmt = $this->conn->prepare("DELETE FROM SchlagwortMedien WHERE Schlagwort_ID = ? AND Medium_ID = ?");
-        $stmt->bind_param("ss", $keywordId, $mediaId);
+        $getMediaType = $this->mediumRepository->getMediaTypeById($mediaId);
+        $columnName = $this->mediumRepository->nameConverterId($getMediaType);
+        $stmt = $this->conn->prepare("DELETE FROM SchlagwortMedien WHERE Schlagwort_ID = ? AND $columnName = ?");
+        $stmt->bind_param("is", $keywordId, $mediaId);
         $stmt->execute();
         $stmt->close();
     }
