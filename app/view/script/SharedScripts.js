@@ -145,10 +145,12 @@ function openMedium(mediumSrc, title, mediumID) {
             modal.style.display = 'none'; // Modal verstecken
         }
     };
+
+    loadKeyWords('mediumKeywords', 'checkbox', false);
 }
 
 function applyKeywordMapping(mediumID){
-    const associations = getAssociation(mediumId);
+    const associations = getAssociation(mediumID);
     
 }
 
@@ -415,7 +417,7 @@ function loadKeyWords(keyWordElement, listType, deletionButton){
                         checkbox.id = keyword.Schlagwort_ID;
 
                         if (keyWordElement == 'mediumKeywords'){
-                            const mediumId = document.getElementById('modalMedium').id;
+                            const mediumId = document.getElementById('modalMedium').value;
                             checkbox.onchange = function(){
                                 handleCheckboxChange(this, mediumId);
                             }
@@ -545,7 +547,7 @@ function deleteKeyword(keywordId){
 
 function handleCheckboxChange(checkbox, mediumId){
     if (checkbox.checked){
-        console.log("Checkbox " + checkbox.id + " wurde ausgewählt.");
+        console.log("Checkbox " + checkbox.id + " wurde für " + mediumId + " ausgewählt.");
         fetch('http://localhost/Mediendatenbank/public/KeywordController/createAssociation', {
             method: 'POST',
             headers: {
@@ -558,7 +560,7 @@ function handleCheckboxChange(checkbox, mediumId){
         })
         .catch(error => console.error('Fehler beim Anlegen des Schlagwortbindings:', error));
     }else{
-        console.log("Checkbox " + checkbox.id + " wurde abgewählt.");
+        console.log("Checkbox " + checkbox.id + " wurde für " + mediumId + " abgewählt.");
         fetch('http://localhost/Mediendatenbank/public/KeywordController/deleteAssociation', {
             method: 'POST',
             headers: {
