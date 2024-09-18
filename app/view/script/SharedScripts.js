@@ -387,7 +387,10 @@ function loadKeyWords(keyWordElement, listType, deletionButton){
 
                         if (keyWordElement == 'mediumKeywords'){
                             const mediumId = document.getElementById('modalMedium').id;
-                            getAssociation(mediumId);
+                            checkbox.onchange = function(){
+                                handleCheckboxChange(this, mediumId);
+                            }
+                            //getAssociation(mediumId);
                         }
         
                         const label = document.createElement('label');
@@ -508,6 +511,36 @@ function deleteKeyword(keywordId){
             }
         })
         .catch(error => console.error('Fehler beim Löschen des Schlagworts:', error));
+    }
+}
+
+function handleCheckboxChange(checkbox, mediumId){
+    if (checkbox.checked){
+        console.log("Checkbox " + checkbox.id + " wurde ausgewählt.");
+        fetch('http://localhost/Mediendatenbank/public/KeywordController/createAssociation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                keywordId: checkbox.id,
+                mediumId: mediumId,
+            })
+        })
+        .catch(error => console.error('Fehler beim Anlegen des Schlagwortbindings:', error));
+    }else{
+        console.log("Checkbox " + checkbox.id + " wurde abgewählt.");
+        fetch('http://localhost/Mediendatenbank/public/KeywordController/deleteAssociation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                keywordId: checkbox.id,
+                mediumId: mediumId,
+            })
+        })
+        .catch(error => console.error('Fehler beim Anlegen des Schlagwortbindings:', error));
     }
 }
 
