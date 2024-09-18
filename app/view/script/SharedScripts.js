@@ -147,6 +147,10 @@ function openMedium(mediumSrc, title, mediumID) {
     };
 }
 
+function applyKeywordMapping(mediumID){
+    
+}
+
 function updateMedium(){
     const mediumID = document.getElementById('modalMedium').value;
     const mediumTitle = document.getElementById('newTitle').value;
@@ -229,6 +233,7 @@ function loadAll(){
                     element.addEventListener('click', function() {
                         openMedium(medium.Dateipfad, medium.Titel || 'Kein Titel', element.id);
                         initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                        applyKeywordMapping(element.id);
                     });
                 })
             });
@@ -378,6 +383,12 @@ function loadKeyWords(keyWordElement, listType, deletionButton){
                         checkbox.type = 'checkbox';
                         checkbox.name = 'keywords[]';
                         checkbox.value = keyword.Schlagwort_ID;
+                        checkbox.id = keyword.Schlagwort_ID;
+
+                        if (keyWordElement == 'mediumKeywords'){
+                            const mediumId = document.getElementById('modalMedium').id;
+                            getAssociation(mediumId);
+                        }
         
                         const label = document.createElement('label');
                         const labelText = document.createTextNode(" " + keyword.Schlagwort_Name); // Nutze den Keyword Namen als Label
@@ -498,6 +509,30 @@ function deleteKeyword(keywordId){
         })
         .catch(error => console.error('Fehler beim Löschen des Schlagworts:', error));
     }
+}
+
+function getAssociation(mediumId){
+    let associations = [];
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/getAllKeywordsAndAssociations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            mediumId: mediumId,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Schlagwortbinding erfolgreich ausgelesen.' + data);
+        } else {
+            alert('Fehler beim Auslesen des Schlagwortbindings: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Fehler beim Abfragen des Schlagwortbindings:', error));
+
+    return associations;
 }
 
 function loadUsers(listId){
