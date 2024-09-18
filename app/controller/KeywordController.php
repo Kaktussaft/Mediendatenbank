@@ -60,6 +60,13 @@ class KeywordController extends Controller
 
     public function getAllKeywordsAndAssociations()
     {
+        $mediumId = $this->data['mediumId'] ?? 0;
+        $mediaKeywords = $this->keywordRepository->getkeywordsforSentMedia($mediumId);
+        echo json_encode(['status' => 'success', 'data' => $mediaKeywords]);
+    }
+
+    public function getKeywordsForSentMedia()
+    {
         $keywordsAndAssociations = $this->keywordRepository->readAllKeywordsWithAssociations($this->currentUserId);
         echo json_encode(['status' => 'success', 'data' => $keywordsAndAssociations]);
     }
