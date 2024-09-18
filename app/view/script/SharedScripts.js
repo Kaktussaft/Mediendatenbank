@@ -148,6 +148,7 @@ function openMedium(mediumSrc, title, mediumID) {
 }
 
 function applyKeywordMapping(mediumID){
+    const associations = getAssociation(mediumId);
     
 }
 
@@ -266,7 +267,14 @@ function loadPhotos() {
                 const img = document.createElement('img');
                 img.src = bild.Dateipfad;
                 img.alt = bild.Titel;
+                img.id = bild.Foto_ID;
                 bildContainer.appendChild(img);
+
+                img.addEventListener('click', function() {
+                    openMedium(img.src, img.alt || 'Kein Titel', img.id);
+                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    applyKeywordMapping(img.id);
+                });
             });
         })
         .catch(error => console.error('Fehler beim Laden der Bilder:', error));
@@ -296,7 +304,14 @@ function loadVideos() {
                 const vid = document.createElement('img');
                 vid.src = '/Mediendatenbank/public/placeholders/placeholder_video.jpg';
                 vid.alt = video.Titel;
+                vid.id = video.Video_ID;
                 contentContainer.appendChild(vid);
+
+                vid.addEventListener('click', function() {
+                    openMedium(vid.src, vid.alt || 'Kein Titel', vid.id);
+                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    applyKeywordMapping(vid.id);
+                });
             });
         })
         .catch(error => console.error('Fehler beim Laden der Videos:', error));
@@ -326,7 +341,14 @@ function loadEbooks() {
                 const ebk = document.createElement('img');
                 ebk.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.jpg';
                 ebk.alt = ebook.Titel;
+                ebk.id = ebook.ebook_ID;
                 contentContainer.appendChild(ebk);
+
+                ebk.addEventListener('click', function() {
+                    openMedium(ebk.src, ebk.alt || 'Kein Titel', ebk.id);
+                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    applyKeywordMapping(ebk.id);
+                });
             });
         })
         .catch(error => console.error('Fehler beim Laden der E-Books:', error));
@@ -356,7 +378,14 @@ function loadAudioBooks() {
                 const abk = document.createElement('img');
                 abk.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.jpg';
                 abk.alt = audiobook.Titel;
+                abk.id = audiobook.Hörbuch_IDM
                 contentContainer.appendChild(abk);
+
+                abk.addEventListener('click', function() {
+                    openMedium(abk.src, abk.alt || 'Kein Titel', abk.id);
+                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    applyKeywordMapping(abk.id);
+                });
             });
         })
         .catch(error => console.error('Fehler beim Laden der Hörbücher:', error));
@@ -390,7 +419,7 @@ function loadKeyWords(keyWordElement, listType, deletionButton){
                             checkbox.onchange = function(){
                                 handleCheckboxChange(this, mediumId);
                             }
-                            //getAssociation(mediumId);
+                            
                         }
         
                         const label = document.createElement('label');
@@ -546,7 +575,7 @@ function handleCheckboxChange(checkbox, mediumId){
 
 function getAssociation(mediumId){
     let associations = [];
-    fetch('http://localhost/Mediendatenbank/public/KeywordController/getAllKeywordsAndAssociations', {
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/getKeywordsForSentMedia', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
