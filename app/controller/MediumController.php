@@ -23,7 +23,6 @@ class MediumController extends Controller
         if (isset($_SESSION['currentUser']['Benutzer_ID'])) {
             $this->currentUserId = $_SESSION['currentUser']['Benutzer_ID'];
         } else {
-
         }
 
         $this->mediumRepository = new MediumRepository();
@@ -133,9 +132,9 @@ class MediumController extends Controller
 
     public function deleteAllMediaForUser($userId)
     {
-        $allMediaIdsForUser = $this->mediumRepository->getAllMediaIdsPerUser($userId);
-        
-        foreach($allMediaIdsForUser as $mediaId) {
+        $allMediaIdsForUser = $this->mediumRepository->getAllMediaIdsForUserPureId($userId);
+
+        foreach ($allMediaIdsForUser as $mediaId) {
             $this->mediumRepository->deleteMedium($mediaId);
         }
     }
