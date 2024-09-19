@@ -45,7 +45,7 @@ class MediumRepository
         $stmt->close();
     }
 
-    public function updateMedium( $id, $title)
+    public function updateMedium($id, $title)
     {
         $tableType = $this->getMediaTypeById($id);
         $idQuery = $this->nameConverterId($tableType);
@@ -162,8 +162,7 @@ class MediumRepository
 
     public function nameConverterDbName($medium) //from english to db table name
     {
-        switch
-        ($medium) {
+        switch ($medium) {
             case 'photo':
                 return 'Fotos';
             case 'video':
@@ -176,8 +175,7 @@ class MediumRepository
     }
     public function nameConverterId($medium) //from db table name to id
     {
-        switch
-        ($medium) {
+        switch ($medium) {
             case 'Fotos':
                 return 'Foto_ID';
             case 'Video_ID':
@@ -187,5 +185,9 @@ class MediumRepository
             case 'Ebooks':
                 return 'ebook_ID';
         }
+    }
+    public function idTypeToTableId($mediumId) {
+        $medium = $this->getMediaTypeById($mediumId);
+       return $this->nameConverterId($this->nameConverterDbName($medium));
     }
 }
