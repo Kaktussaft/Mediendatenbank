@@ -181,7 +181,7 @@ class MediumRepository
             case 'Fotos':
                 return 'Foto_ID';
             case 'Video_ID':
-                return 'video';
+                return 'Video_ID';
             case 'Hörbucher':
                 return 'Hörbuch_ID';
             case 'Ebooks':
