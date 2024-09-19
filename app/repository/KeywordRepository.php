@@ -51,9 +51,10 @@ class KeywordRepository
     public function readAllKeywordsWithAssociations($currentUserId)
     {
         $keywords = [];
+        $associations = [];
 
         $stmt = $this->conn->prepare("SELECT * FROM Schlagworte WHERE Benutzer_ID = ?");
-        $stmt->bind_param("s", $currentUserId);
+        $stmt->bind_param("i", $currentUserId);
         $stmt->execute();
         $resultKeywords = $stmt->get_result();
 
@@ -62,20 +63,19 @@ class KeywordRepository
         }
         $stmt->close();
 
-        $associations = [];
-        $stmt = $this->conn->prepare("SELECT * FROM SchlagwortMedien WHERE Schlagwort_ID = ?");
 
-        while ($keyword = $resultKeywords->fetch_assoc()) {
+        foreach ($keywords as $keyword) {
             $keywordId = $keyword['Schlagwort_ID'];
+            $stmt = $this->conn->prepare("SELECT * FROM SchlagwortMedien WHERE Schlagwort_ID = ?");
             $stmt->bind_param("i", $keywordId);
             $stmt->execute();
             $resultAssociations = $stmt->get_result();
-
             while ($association = $resultAssociations->fetch_assoc()) {
                 $associations[] = $association;
             }
+
+            $stmt->close();
         }
-        $stmt->close();
         return [$keywords, $associations];
     }
 
@@ -112,17 +112,18 @@ class KeywordRepository
         return $amount;
     }
 
-    public function getkeywordsforSentMedia($mediaIds)
+    public function getkeywordsforSentMedia($mediaId)
     {
         $associations = [];
-        foreach ($mediaIds as $mediaId) {
-            $stmt = $this->conn->prepare("SELECT * FROM SchlagwortMedien WHERE Medium_ID = ?");
-            $stmt->bind_param("s", $mediaId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                $associations[] = $row;
-            }
+        $tableName = $this->mediumRepository->idTypeToTableId($mediaId);
+
+        $stmt = $this->conn->prepare("SELECT * FROM SchlagwortMedien WHERE $tableName = ?");
+        $stmt->bind_param("s", $mediaId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $associations[] = $row;
+
             $stmt->close();
         }
         return $associations;
