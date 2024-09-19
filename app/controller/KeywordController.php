@@ -87,12 +87,14 @@ class KeywordController extends Controller
 
     public function deleteAllKeywordsAndAssociations($userId)
     {
+        $keywords = [];
+        $associations = [];
         $data = $this->keywordRepository->readAllKeywordsWithAssociations($userId);
-        $keywords = $data['keywords'];
-        $associations = $data['associations'];
+        $keywords = $data[0];
+        $associations = $data[1];
 
         foreach ($associations as $association) {
-            $this->keywordRepository->removeKeywordFromMedia($association['Schlagwort_ID'], $association['Medium_ID']);
+            $this->keywordRepository->deleteAssociationByKeywordId($association['Schlagwort_ID']);
         }
         
         foreach ($keywords as $keyword) {
