@@ -99,6 +99,14 @@ class KeywordRepository
         $stmt->close();
     }
 
+    public function deleteAssociationByKeywordId($keywordId)
+    {
+        $stmt = $this->conn->prepare("DELETE FROM SchlagwortMedien WHERE Schlagwort_ID = ?");
+        $stmt->bind_param("i", $keywordId);
+        $stmt->execute();
+        $stmt->close();
+    }
+
     public function readKeywordAmountPerUser($userId)
     {
         $stmt = $this->conn->prepare("SELECT COUNT(Schlagwort_ID) FROM Schlagworte WHERE Benutzer_ID = ?");
