@@ -133,6 +133,11 @@ class MediumRepository
     {
         $tablename = $this->getMediaTypeById($id);
         $idQuery = $this->nameConverterId($tablename);
+        $stmt = $this->conn->prepare("DELETE FROM SchlagwortMedien  WHERE $idQuery = ?");
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $stmt->close();
+
         $stmt = $this->conn->prepare("DELETE FROM $tablename WHERE $idQuery = ?");
         $stmt->bind_param("s", $id);
         $stmt->execute();
