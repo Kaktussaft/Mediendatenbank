@@ -145,8 +145,9 @@ class MediumRepository
         $results = [];
 
         foreach ($mediaTypes as $type) {
-            $stmt = $this->conn->prepare("SELECT ID FROM $type WHERE Benutzer_ID = ?");
-            $stmt->bind_param("s", $userId);
+            $tableId = $this->nameConverterId($type);
+            $stmt = $this->conn->prepare("SELECT $tableId FROM $type WHERE Benutzer_ID = ?");
+            $stmt->bind_param("i", $userId);
             $stmt->execute();
             $result = $stmt->get_result();
             $mediaData = [];
@@ -157,6 +158,28 @@ class MediumRepository
             $stmt->close();
         }
 
+        return $results;
+    }
+
+    public function getAllMediaIdsForUserPureId($userId)
+    {
+        $mediaTypes = ['Fotos', 'Videos', 'Hörbücher', 'Ebooks'];
+        $results = [];
+    
+        foreach ($mediaTypes as $type) {
+            $tableId = $this->nameConverterId($type);
+            $stmt = $this->conn->prepare("SELECT $tableId FROM $type WHERE Benutzer_ID = ?");
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $mediaData = [];
+            while ($row = $result->fetch_assoc()) {
+                $mediaData[] = $row[$tableId];
+            }
+            $results = array_merge($results, $mediaData);
+            $stmt->close();
+        }
+    
         return $results;
     }
 
@@ -178,9 +201,9 @@ class MediumRepository
         switch ($medium) {
             case 'Fotos':
                 return 'Foto_ID';
-            case 'Video_ID':
+            case 'Videos':
                 return 'Video_ID';
-            case 'Hörbucher':
+            case 'Hörbücher':
                 return 'Hörbuch_ID';
             case 'Ebooks':
                 return 'ebook_ID';
