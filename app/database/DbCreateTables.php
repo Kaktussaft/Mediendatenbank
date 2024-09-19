@@ -169,26 +169,26 @@ if ($conn->query($sql) === TRUE) {
 }
 
 # Weiter mit Alter table weil das sonst mit den ganzen Fremdschlüsseln so ein Salat wurde. Keine Ahnung, ob das überhaupt als ein Befehl geht
-$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN ebook_ID CHAR(36) not null, ADD foreign key(ebook_ID) References ebooks(ebook_ID)";
+$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN ebook_ID CHAR(36), ADD foreign key(ebook_ID) References ebooks(ebook_ID)";
 
 if ($conn->query($sql) === TRUE) {
     echo "Tabelle erfolgreich geändert und Fremdschlüssel gesetzt.";
 } else {
     echo "Fehler beim Ändern der Tabelle: " . $conn->error;
 }
-$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN Hörbuch_ID CHAR(36) not null, ADD foreign key(Hörbuch_ID) References Hörbücher(Hörbuch_ID)";
+$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN Hörbuch_ID CHAR(36), ADD foreign key(Hörbuch_ID) References Hörbücher(Hörbuch_ID)";
 if ($conn->query($sql) === TRUE) {
     echo "Tabelle erfolgreich geändert und Fremdschlüssel gesetzt.";
 } else {
     echo "Fehler beim Ändern der Tabelle: " . $conn->error;
 }
-$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN Video_ID CHAR(36) not null, ADD foreign key(Video_ID) References Videos(Video_ID)";
+$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN Video_ID CHAR(36), ADD foreign key(Video_ID) References Videos(Video_ID)";
 if ($conn->query($sql) === TRUE) {
     echo "Tabelle erfolgreich geändert und Fremdschlüssel gesetzt.";
 } else {
     echo "Fehler beim Ändern der Tabelle: " . $conn->error;
 }
-$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN Foto_ID CHAR(36) not null, ADD foreign key(Foto_ID) References Fotos(Foto_ID)";
+$sql = "ALTER TABLE SchlagwortMedien ADD COLUMN Foto_ID CHAR(36), ADD foreign key(Foto_ID) References Fotos(Foto_ID)";
 if ($conn->query($sql) === TRUE) {
     echo "Tabelle erfolgreich geändert und Fremdschlüssel gesetzt.";
 } else {
