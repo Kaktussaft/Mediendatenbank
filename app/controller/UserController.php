@@ -58,7 +58,13 @@ class UserController extends Controller
    
     public function toggleAdminView()
     {
+        if (!isset($_SESSION['currentUser'])) {
+            header('Location: http://localhost/Mediendatenbank/public/');
+            exit();
+        }
+        else{
         $this->view('Admin');
+        }
     }
     public function toggleUserView()
     {
@@ -150,7 +156,9 @@ class UserController extends Controller
         $rawData = file_get_contents('php://input');
         $data = json_decode($rawData, true);
         if (json_last_error() === JSON_ERROR_NONE) {
-            $userId = isset($data['userId']) ? $data['userId'] : '';
+            $username = isset($data['username']) ? $data['username'] : '';
+            $user = $this->userRepository->getUserByUsername($username);
+            $userId = $user['Benutzer_ID'];
             $this->keywordController->deleteAllKeywordsAndAssociations($userId);
             $this->mediumController->deleteAllMediaForUser($userId);
             $this->userRepository->deleteUser($userId);
