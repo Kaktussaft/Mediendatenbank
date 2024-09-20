@@ -218,6 +218,7 @@ class MediumRepository
                 return 'ebook_ID';
         }
     }
+    
     public function idTypeToTableId($mediumId) {
         $medium = $this->getMediaTypeById($mediumId);
        return $this->nameConverterId($this->nameConverterDbName($medium));

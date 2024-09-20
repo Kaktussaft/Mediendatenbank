@@ -81,8 +81,7 @@ class KeywordRepository
 
     public function assignKeywordToMedia($keywordId, $mediaId)
     {
-        $getMediaType = $this->mediumRepository->getMediaTypeById($mediaId);
-        $columnName = $this->mediumRepository->nameConverterId($getMediaType);
+        $columnName = $this->mediumRepository->idTypeToTableId($mediaId);
         $stmt = $this->conn->prepare("INSERT INTO SchlagwortMedien (Schlagwort_ID, $columnName) VALUES (?, ?)");
         $stmt->bind_param("is", $keywordId, $mediaId);
         $stmt->execute();
@@ -91,8 +90,7 @@ class KeywordRepository
 
     public function removeKeywordFromMedia($keywordId, $mediaId)
     {
-        $getMediaType = $this->mediumRepository->getMediaTypeById($mediaId);
-        $columnName = $this->mediumRepository->nameConverterId($getMediaType);
+        $columnName = $this->mediumRepository->idTypeToTableId($mediaId);
         $stmt = $this->conn->prepare("DELETE FROM SchlagwortMedien WHERE Schlagwort_ID = ? AND $columnName = ?");
         $stmt->bind_param("is", $keywordId, $mediaId);
         $stmt->execute();
