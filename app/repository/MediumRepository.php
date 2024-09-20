@@ -113,7 +113,11 @@ class MediumRepository
     {
         $tables = ['Fotos', 'Videos', 'Hörbücher', 'Ebooks'];
         foreach ($tables as $table) {
-            $idQuery = rtrim($table, 's') . "_ID";
+            if($table == 'Hörbücher') {
+                $idQuery = "Hörbuch_ID";
+            } else {
+                $idQuery = rtrim($table, 's') . "_ID";
+            }
             $query = "SELECT Typ FROM $table WHERE $idQuery = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param("s", $id);
@@ -122,7 +126,7 @@ class MediumRepository
             if ($row = $result->fetch_assoc()) {
                 $stmt->close();
                 $mediumtype = $row['Typ'];
-                return $this->nameConverterDbName($mediumtype);
+               return $mediumtype;
             }
             $stmt->close();
         }
