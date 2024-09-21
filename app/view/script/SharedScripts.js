@@ -149,9 +149,57 @@ function openMedium(mediumSrc, title, mediumID) {
     loadKeyWords('mediumKeywords', 'checkbox', false);
 }
 
-function applyKeywordMapping(mediumID){
-    const associations = getAssociation(mediumID);
+async function isChecked(mediumID, keywordID){
+    const associations = await getAssociation(mediumID);
+
+    return associations.some(association => association.Schlagwort_ID === keywordID);
     
+}
+
+async function getSelectedKeywordsWithAssociation(){
+    let selectedKeywords = [];
+    
+    fetch('http://localhost/Mediendatenbank/public/KeywordController/getAllKeywordsAndAssociations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status = 'success'){
+            const keyWords = data.data[0];
+            const associations = data.data[1];
+
+            keyWords.forEach(keyword =>{
+                const checkbox = document.getElementById(keyword.Schlagwort_ID);
+                const existsInAssociations = associations.some(item => item.Schlagwort_ID === keyword.Schlagwort_ID);
+
+                    if (checkbox && checkbox.checked){
+                        if (existsInAssociations){
+                            associations.forEach(association => {
+                                if (association.Schlagwort_ID == checkbox.id){
+                                    selectedKeywords.push(association);
+                                }
+                            })
+                        } else {
+                            selectedKeywords.push({
+                                "Schlagwort_ID": keyword.Schlagwort_ID,
+                                "Foto_ID": null,
+                                "Video_ID": null,
+                                "Hörbuch_ID": null,
+                                "ebook_ID": null,
+                            })
+                        }   
+                    }
+            })
+        } else {
+            console.error('Fehler beim Laden der ausgewählten Schlagworte:', data.message);
+        }            
+    })
+    .catch(error => console.error('Fehler beim Laden der ausgewählten Schlagworte:', error));
+
+    return selectedKeywords;
 }
 
 function updateMedium(){
@@ -188,9 +236,10 @@ function deleteMedium(){
         .catch(error => console.error('Fehler beim Löschen des Mediums:', error));
 }
 
-function loadAll(){
+async function loadAll(){
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
@@ -206,11 +255,13 @@ function loadAll(){
         .then(data => {
             const contentArea = document.getElementById('contentArea');
             contentArea.innerHTML = '';
+            
             Object.keys(data.data).forEach(type => {
                 const mediaTypeList = data.data[type];
                 mediaTypeList.forEach(medium => {
                     
                     const element = document.createElement('img');
+                    let lastKeywordId = 0;
                     switch (type){
                         case 'Fotos':
                             element.src = medium.Dateipfad;
@@ -231,13 +282,45 @@ function loadAll(){
                     }
                     
                     element.alt = medium.Titel || 'Kein Titel';
-                    contentArea.appendChild(element);
-
-                    element.addEventListener('click', function() {
-                        openMedium(medium.Dateipfad, medium.Titel || 'Kein Titel', element.id);
-                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
-                        applyKeywordMapping(element.id);
-                    });
+                    if (selectedKeywords.length > 0){
+                        
+                        let inAll = true;
+                        
+                        let objectHandled = false;
+                        selectedKeywords.forEach(association =>{
+                            if (association.Schlagwort_ID != lastKeywordId){
+                                lastKeywordId = association.Schlagwort_ID;
+                                
+                                if(!Object.values(association).includes(element.id)){
+                                    inAll = false;
+                                } else{
+                                    objectHandled = true;
+                                }
+                            } else {
+                                if (Object.values(association).includes(element.id) && !objectHandled) {
+                                    inAll = true;
+                                    objectHandled = true;
+                                }
+                                else if(!Object.values(association).includes(element.id) && !objectHandled){
+                                    inAll = false;
+                                } 
+                            }
+                        })
+                        if (inAll){
+                            contentArea.appendChild(element);
+                            element.addEventListener('click', function() {
+                            openMedium(medium.Dateipfad, medium.Titel || 'Kein Titel', element.id);
+                            initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                        });
+                        }
+                    } else {
+                        contentArea.appendChild(element);
+                        element.addEventListener('click', function() {
+                            openMedium(medium.Dateipfad, medium.Titel || 'Kein Titel', element.id);
+                            initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                        });
+                    }
+                    
                 })
             });
             
@@ -245,9 +328,10 @@ function loadAll(){
         .catch(error => console.error('Fehler beim Laden der Bilder:', error));
 }
 
-function loadPhotos() {
+async function loadPhotos() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
@@ -261,30 +345,64 @@ function loadPhotos() {
     })
         .then(response => response.json())
         .then(data => {
-            const bildContainer = document.getElementById('contentArea');
-            bildContainer.innerHTML = '';
+            const contentContainer = document.getElementById('contentArea');
+            contentContainer.innerHTML = '';
             const photos = data.data['Fotos'];
 
             photos.forEach(bild => {
                 const img = document.createElement('img');
+                let lastKeywordId = 0;
                 img.src = bild.Dateipfad;
                 img.alt = bild.Titel;
                 img.id = bild.Foto_ID;
-                bildContainer.appendChild(img);
 
-                img.addEventListener('click', function() {
-                    openMedium(img.src, img.alt || 'Kein Titel', img.id);
-                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
-                    applyKeywordMapping(img.id);
-                });
+                if (selectedKeywords.length > 0){
+                        
+                    let inAll = true;
+                    
+                    let objectHandled = false;
+                    selectedKeywords.forEach(association =>{
+                        if (association.Schlagwort_ID != lastKeywordId){
+                            lastKeywordId = association.Schlagwort_ID;
+                            
+                            if(!Object.values(association).includes(img.id)){
+                                inAll = false;
+                            } else{
+                                objectHandled = true;
+                            }
+                        } else {
+                            if (Object.values(association).includes(img.id) && !objectHandled) {
+                                inAll = true;
+                                objectHandled = true;
+                            }
+                            else if(!Object.values(association).includes(img.id) && !objectHandled){
+                                inAll = false;
+                            } 
+                        }
+                    })
+                    if (inAll){
+                        contentContainer.appendChild(img);
+                        img.addEventListener('click', function() {
+                        openMedium(img.src, img.alt || 'Kein Titel', img.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                    }
+                } else {
+                    contentContainer.appendChild(img);
+                    img.addEventListener('click', function() {
+                        openMedium(img.src, img.alt || 'Kein Titel', img.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                }
             });
         })
         .catch(error => console.error('Fehler beim Laden der Bilder:', error));
 }
 
-function loadVideos() {
+async function loadVideos() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
@@ -304,24 +422,57 @@ function loadVideos() {
 
             videos.forEach(video => {
                 const vid = document.createElement('img');
+                let lastKeywordId = 0;
                 vid.src = '/Mediendatenbank/public/placeholders/placeholder_video.jpg';
                 vid.alt = video.Titel;
                 vid.id = video.Video_ID;
-                contentContainer.appendChild(vid);
-
-                vid.addEventListener('click', function() {
-                    openMedium(vid.src, vid.alt || 'Kein Titel', vid.id);
-                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
-                    applyKeywordMapping(vid.id);
-                });
+                if (selectedKeywords.length > 0){
+                        
+                    let inAll = true;
+                    
+                    let objectHandled = false;
+                    selectedKeywords.forEach(association =>{
+                        if (association.Schlagwort_ID != lastKeywordId){
+                            lastKeywordId = association.Schlagwort_ID;
+                            
+                            if(!Object.values(association).includes(vid.id)){
+                                inAll = false;
+                            } else{
+                                objectHandled = true;
+                            }
+                        } else {
+                            if (Object.values(association).includes(vid.id) && !objectHandled) {
+                                inAll = true;
+                                objectHandled = true;
+                            }
+                            else if(!Object.values(association).includes(vid.id) && !objectHandled){
+                                inAll = false;
+                            } 
+                        }
+                    })
+                    if (inAll){
+                        contentContainer.appendChild(vid);
+                        vid.addEventListener('click', function() {
+                        openMedium(vid.src, vid.alt || 'Kein Titel', vid.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                    }
+                } else {
+                    contentContainer.appendChild(vid);
+                    vid.addEventListener('click', function() {
+                        openMedium(vid.src, vid.alt || 'Kein Titel', vid.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                }
             });
         })
         .catch(error => console.error('Fehler beim Laden der Videos:', error));
 }
 
-function loadEbooks() {
+async function loadEbooks() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
@@ -341,24 +492,57 @@ function loadEbooks() {
 
             ebooks.forEach(ebook => {
                 const ebk = document.createElement('img');
+                let lastKeywordId = 0;
                 ebk.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.jpg';
                 ebk.alt = ebook.Titel;
                 ebk.id = ebook.ebook_ID;
-                contentContainer.appendChild(ebk);
-
-                ebk.addEventListener('click', function() {
-                    openMedium(ebk.src, ebk.alt || 'Kein Titel', ebk.id);
-                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
-                    applyKeywordMapping(ebk.id);
-                });
+                if (selectedKeywords.length > 0){
+                        
+                    let inAll = true;
+                    
+                    let objectHandled = false;
+                    selectedKeywords.forEach(association =>{
+                        if (association.Schlagwort_ID != lastKeywordId){
+                            lastKeywordId = association.Schlagwort_ID;
+                            
+                            if(!Object.values(association).includes(ebk.id)){
+                                inAll = false;
+                            } else{
+                                objectHandled = true;
+                            }
+                        } else {
+                            if (Object.values(association).includes(ebk.id) && !objectHandled) {
+                                inAll = true;
+                                objectHandled = true;
+                            }
+                            else if(!Object.values(association).includes(ebk.id) && !objectHandled){
+                                inAll = false;
+                            } 
+                        }
+                    })
+                    if (inAll){
+                        contentContainer.appendChild(ebk);
+                        ebk.addEventListener('click', function() {
+                        openMedium(ebk.src, ebk.alt || 'Kein Titel', ebk.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                    }
+                } else {
+                    contentContainer.appendChild(ebk);
+                    ebk.addEventListener('click', function() {
+                        openMedium(ebk.src, ebk.alt || 'Kein Titel', ebk.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                }
             });
         })
         .catch(error => console.error('Fehler beim Laden der E-Books:', error));
 }
 
-function loadAudioBooks() {
+async function loadAudioBooks() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
         method: 'POST',
@@ -378,23 +562,55 @@ function loadAudioBooks() {
 
             audiobooks.forEach(audiobook => {
                 const abk = document.createElement('img');
+                let lastKeywordId = 0;
                 abk.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.jpg';
                 abk.alt = audiobook.Titel;
-                abk.id = audiobook.Hörbuch_IDM
-                contentContainer.appendChild(abk);
-
-                abk.addEventListener('click', function() {
-                    openMedium(abk.src, abk.alt || 'Kein Titel', abk.id);
-                    initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
-                    applyKeywordMapping(abk.id);
-                });
+                abk.id = audiobook.Hörbuch_ID;
+                if (selectedKeywords.length > 0){
+                        
+                    let inAll = true;
+                    
+                    let objectHandled = false;
+                    selectedKeywords.forEach(association =>{
+                        if (association.Schlagwort_ID != lastKeywordId){
+                            lastKeywordId = association.Schlagwort_ID;
+                            
+                            if(!Object.values(association).includes(abk.id)){
+                                inAll = false;
+                            } else{
+                                objectHandled = true;
+                            }
+                        } else {
+                            if (Object.values(association).includes(abk.id) && !objectHandled) {
+                                inAll = true;
+                                objectHandled = true;
+                            }
+                            else if(!Object.values(association).includes(abk.id) && !objectHandled){
+                                inAll = false;
+                            } 
+                        }
+                    })
+                    if (inAll){
+                        contentContainer.appendChild(abk);
+                        abk.addEventListener('click', function() {
+                            openMedium(abk.src, abk.alt || 'Kein Titel', abk.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                    }
+                } else {
+                    contentArea.appendChild(abk);
+                    abk.addEventListener('click', function() {
+                        openMedium(abk.src, abk.alt || 'Kein Titel', abk.id);
+                        initModal('modifyMediumModal', 'open-modifyMedium-modal', 'close-modifyMedium-modal');
+                    });
+                }
             });
         })
         .catch(error => console.error('Fehler beim Laden der Hörbücher:', error));
 }
 
-function loadKeyWords(keyWordElement, listType, deletionButton){
-    fetch('http://localhost/Mediendatenbank/public/KeywordController/getAllKeywordsAndAssociations', {
+async function loadKeyWords(keyWordElement, listType, deletionButton){
+    await fetch('http://localhost/Mediendatenbank/public/KeywordController/getAllKeywordsAndAssociations', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -409,19 +625,27 @@ function loadKeyWords(keyWordElement, listType, deletionButton){
 
                 switch (listType) {
                     case "checkbox":
-                    keyWords.forEach(keyword => {
+                    keyWords.forEach(async keyword => {
                         const checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
                         checkbox.name = 'keywords[]';
                         checkbox.value = keyword.Schlagwort_ID;
                         checkbox.id = keyword.Schlagwort_ID;
 
-                        if (keyWordElement == 'mediumKeywords'){
+                        if (keyWordElement === 'mediumKeywords'){
                             const mediumId = document.getElementById('modalMedium').value;
+                            const checked = await isChecked(mediumId, keyword.Schlagwort_ID);
                             checkbox.onchange = function(){
                                 handleCheckboxChange(this, mediumId);
                             }
+                            checkbox.checked = checked;
                             
+                        }
+
+                        if (keyWordElement === 'keyWordList'){
+                            checkbox.onchange = function(){
+                                loadAll();
+                            }
                         }
         
                         const label = document.createElement('label');
@@ -475,7 +699,6 @@ function refreshKeyWords(){
     loadKeyWords('keyWordList', 'checkbox', false);
     loadKeyWords('modifyKeyWordList', 'checkbox', true);
     loadKeyWords('keyWordSelection', 'select', false);
-    loadKeyWords('mediumKeywords', 'checkbox', false);
 }
 
 function createKeyWord(keywordName) {
@@ -488,15 +711,6 @@ function createKeyWord(keywordName) {
             keywordName: keywordName,
         })
     })
-    //.then(response => response.json())
-    //.then(data => {
-    //    if (data.status === 'success') {
-    //        alert('Schlagwort erfolgreich erstellt.');
-    //        loadKeyWords('keyWordElement');  // Reload the list after deletion
-    //    } else {
-    //        alert('Fehler beim Anlegen des Schlagworts: ' + data.message);
-    //    }
-    //})
     .catch(error => console.error('Fehler beim Anlegen des Schlagworts:', error));
 }
 
@@ -575,9 +789,9 @@ function handleCheckboxChange(checkbox, mediumId){
     }
 }
 
-function getAssociation(mediumId){
+async function getAssociation(mediumId){
     let associations = [];
-    fetch('http://localhost/Mediendatenbank/public/KeywordController/getKeywordsForSentMedia', {
+    await fetch('http://localhost/Mediendatenbank/public/KeywordController/getKeywordsForSentMedia', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -589,7 +803,7 @@ function getAssociation(mediumId){
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert('Schlagwortbinding erfolgreich ausgelesen.' + data);
+            associations = data.data;
         } else {
             alert('Fehler beim Auslesen des Schlagwortbindings: ' + data.message);
         }
