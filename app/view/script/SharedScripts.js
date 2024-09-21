@@ -761,7 +761,6 @@ function deleteKeyword(keywordId){
 
 function handleCheckboxChange(checkbox, mediumId){
     if (checkbox.checked){
-        console.log("Checkbox " + checkbox.id + " wurde für " + mediumId + " ausgewählt.");
         fetch('http://localhost/Mediendatenbank/public/KeywordController/createAssociation', {
             method: 'POST',
             headers: {
