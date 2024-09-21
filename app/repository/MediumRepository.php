@@ -47,9 +47,10 @@ class MediumRepository
 
     public function updateMedium($id, $title)
     {
-        $tableType = $this->getMediaTypeById($id);
-        $idQuery = $this->nameConverterId($tableType);
-        $stmt = $this->conn->prepare("UPDATE $tableType SET Titel = ? WHERE $idQuery  = ?");
+        $mediaType = $this->getMediaTypeById($id);
+        $tableName = $this->nameConverterDbName($mediaType);
+        $idQuery = $this->nameConverterId($tableName);
+        $stmt = $this->conn->prepare("UPDATE $tableName SET Titel = ? WHERE $idQuery  = ?");
         $stmt->bind_param("ss", $title, $id);
         $stmt->execute();
     }
