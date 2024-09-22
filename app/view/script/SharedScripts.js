@@ -3,24 +3,21 @@ function initModal(modalId, openButtonId, closeButtonId) {
     const openModalLink = document.getElementById(openButtonId);
     const closeModalButton = document.getElementById(closeButtonId);
 
-    // Event-Listener für das Öffnen des Modals
     openModalLink.addEventListener('click', (event) => {
-        event.preventDefault(); // Verhindert das Standardverhalten des Links
-        modal.style.display = 'block'; // Zeigt das Modal an
+        event.preventDefault();
+        modal.style.display = 'block';
     });
-
-    // Event-Listener für das Schließen des Modals
     closeModalButton.addEventListener('click', () => {
-        modal.style.display = 'none'; // Versteckt das Modal
+        modal.style.display = 'none';
     });
-
-    // Schließen des Modals bei Klick außerhalb des Inhaltsbereichs
     window.addEventListener('click', (event) => {
         if (event.target === modal) {
-            modal.style.display = 'none'; // Versteckt das Modal
+            modal.style.display = 'none';
         }
     });
 }
+
+
 function routeLogout(event) {
     event.preventDefault();
     console.log('Logout clicked');
@@ -126,10 +123,10 @@ function openMedium(mediumSrc, title, mediumID) {
     const closeModalButton = document.getElementById('close-mediumModal');
     
 
-    modal.style.display = 'block'; // Modal anzeigen
-    modalMedium.src = mediumSrc; // Setze das Bild im Modal
+    modal.style.display = 'block';
+    modalMedium.src = mediumSrc;
     modalMedium.value = mediumID;
-    caption.innerHTML = title; // Setze den Bildtitel im Modal
+    caption.innerHTML = title;
 
     const modifyButton = document.createElement('button');
     modifyButton.textContent = 'Bearbeiten';
@@ -137,12 +134,12 @@ function openMedium(mediumSrc, title, mediumID) {
     caption.appendChild(modifyButton);
 
     closeModalButton.addEventListener('click', () => {
-        modal.style.display = 'none'; // Versteckt das Modal
+        modal.style.display = 'none';
     });
-    // Schließen des Modals bei Klick außerhalb des Bildes
+    
     modal.onclick = function(event) {
         if (event.target === modal) {
-            modal.style.display = 'none'; // Modal verstecken
+            modal.style.display = 'none';
         }
     };
 
@@ -986,10 +983,8 @@ async function loadDashboard(){
     Promise.all(fetchPromises)
         .then(() => {
             const table = document.createElement('table');
-
-            // Tabellenkopf erstellen (Medientypen)
             const header = table.createTHead();
-            const headerRow = header.insertRow(0); // Erste Zeile für die Spaltenüberschriften
+            const headerRow = header.insertRow(0);
             const headers = ['Fotos', 'Videos', 'Ebooks', 'Hörbücher', 'Schlagwörter'];
             headers.forEach((type) => {
                 const cell = document.createElement('th');
@@ -997,16 +992,15 @@ async function loadDashboard(){
                 headerRow.appendChild(cell);
             });
 
-            // Tabellenkörper erstellen und die Zähler für die Medien-Daten einfügen
             const tbody = table.createTBody();
-            const valueRow = tbody.insertRow(); // Zeile für die Zählerwerte
+            const valueRow = tbody.insertRow();
             const counts = [photoCount, videoCount, ebookCount, audiobookCount, allKeyWordsCount];
             counts.forEach(count => {
                 const cell = valueRow.insertCell();
                 cell.textContent = count;
             });
 
-            dbstatsarea.innerHTML = ''; // Leere das Div zuerst
+            dbstatsarea.innerHTML = '';
             dbstatsarea.appendChild(table);
 
             console.log('Medien gesamt nach Typ: Fotos: ' + photoCount + ', Videos: ' + videoCount + ', Ebooks: ' + ebookCount + ', Hörbücher: ' + audiobookCount);
@@ -1016,7 +1010,6 @@ async function loadDashboard(){
             const userHeader = userTable.createTHead();
             const userHeaderRow = userHeader.insertRow(0);
 
-            // Tabellenkopf erstellen
             ['Username', 'Fotos', 'Videos', 'Ebooks', 'Hörbücher', 'Schlagwörter'].forEach(type => {
                 const cell = document.createElement('th');
                 cell.textContent = type;
@@ -1035,7 +1028,7 @@ async function loadDashboard(){
                 });
             });
 
-            userstatsarea.innerHTML = ''; // Vorherige Inhalte leeren
+            userstatsarea.innerHTML = '';
             userstatsarea.appendChild(userTable);
         })
         .catch(error => {
