@@ -151,6 +151,7 @@ class MediumController extends Controller
             case 'mp4':
             case 'avi':
             case 'mov':
+            case 'mkv':
                 return 'video';
             case 'mp3':
             case 'wav':
