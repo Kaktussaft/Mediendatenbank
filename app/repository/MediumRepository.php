@@ -202,7 +202,7 @@ class MediumRepository
             case 'video':
                 return 'Videos';
             case 'audiobook':
-                return 'Hörbucher';
+                return 'Hörbücher';
             case 'ebook':
                 return 'Ebooks';
         }
