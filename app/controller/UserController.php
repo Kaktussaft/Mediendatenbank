@@ -127,9 +127,9 @@ class UserController extends Controller
             $newEmail = isset($data['email']) ? $data['email'] : '';
             $newSurname = isset($data['lastname']) ? $data['lastname'] : '';
             $newName = isset($data['firstname']) ? $data['firstname'] : '';
-            $newAdmin = isset($data['isAdmin']) ? $data['isAdmin'] : '';
+            $isAdmin = isset($data['isAdmin']) ? $data['isAdmin'] : '';
 
-            list($username, $email, $surname, $name, $isAdmin) = $this->sanitizeUserInput($newUsername, $newEmail, $newSurname, $newName, $newAdmin);
+            list($username, $email, $surname, $name) = $this->sanitizeUserInput($newUsername, $newEmail, $newSurname, $newName);
 
             $userExists = $this->userRepository->readUserByUsername($username);
 
