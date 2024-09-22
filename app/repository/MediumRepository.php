@@ -65,13 +65,14 @@ class MediumRepository
             $query = "SELECT * FROM $type WHERE Benutzer_ID = ?";
 
             if ($searchParameter) {
-                $query .= " AND Titel = '%?%'";
+                $query .= " AND Titel LIKE ?";
             }
 
             $query .= " ORDER BY $sortingParamter $direction";
             $stmt = $this->conn->prepare($query);
 
             if ($searchParameter) {
+                $searchParameter = "%" . $searchParameter . "%";
                 $stmt->bind_param("ss", $currentUserId, $searchParameter);
             } else {
                 $stmt->bind_param("s", $currentUserId);
