@@ -191,7 +191,7 @@ $isAdmin = $data['isAdmin'];
             });
             document.getElementById('searchBar').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') {
-                    // logik für Suche
+                    loadAll();
                 }
             });
             document.getElementById('navAllMedia').addEventListener('click', function(event) {

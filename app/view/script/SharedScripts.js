@@ -239,6 +239,7 @@ function deleteMedium(){
 async function loadAll(){
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const searchParameter = document.getElementById('searchBar').value;
     const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
@@ -249,6 +250,7 @@ async function loadAll(){
         body: JSON.stringify({
             sortingParameter: sortingParameter,
             direction: sortingOrder,
+            searchParameter: searchParameter,
         })
     })
         .then(response => response.json())
@@ -331,6 +333,7 @@ async function loadAll(){
 async function loadPhotos() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const searchParameter = document.getElementById('searchBar').value;
     const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
@@ -341,6 +344,7 @@ async function loadPhotos() {
         body: JSON.stringify({
             sortingParameter: sortingParameter,
             direction: sortingOrder,
+            searchParameter: searchParameter,
         })
     })
         .then(response => response.json())
@@ -402,6 +406,7 @@ async function loadPhotos() {
 async function loadVideos() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const searchParameter = document.getElementById('searchBar').value;
     const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
@@ -412,6 +417,7 @@ async function loadVideos() {
         body: JSON.stringify({
             sortingParameter: sortingParameter,
             direction: sortingOrder,
+            searchParameter: searchParameter,
         })
     })
         .then(response => response.json())
@@ -472,6 +478,7 @@ async function loadVideos() {
 async function loadEbooks() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const searchParameter = document.getElementById('searchBar').value;
     const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
@@ -482,6 +489,7 @@ async function loadEbooks() {
         body: JSON.stringify({
             sortingParameter: sortingParameter,
             direction: sortingOrder,
+            searchParameter: searchParameter,
         })
     })
         .then(response => response.json())
@@ -542,6 +550,7 @@ async function loadEbooks() {
 async function loadAudioBooks() {
     const sortingParameter = getSorting().parameter;
     const sortingOrder = getSorting().order;
+    const searchParameter = document.getElementById('searchBar').value;
     const selectedKeywords = await getSelectedKeywordsWithAssociation();
 
     fetch('http://localhost/Mediendatenbank/public/MediumController/getAllMediums', {
@@ -552,6 +561,7 @@ async function loadAudioBooks() {
         body: JSON.stringify({
             sortingParameter: sortingParameter,
             direction: sortingOrder,
+            searchParameter: searchParameter,
         })
     })
         .then(response => response.json())
