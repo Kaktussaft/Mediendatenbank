@@ -79,16 +79,16 @@ $isAdmin = $data['isAdmin'];
             <h2>Konto bearbeiten</h2>
             <form id="modifyUserFrom">
                 <label for="name">Username:</label>
-                <input type="text" id="name" name="name">
+                <input type="text" id="name" name="name" required>
                 <br>
                 <label for="email">E-Mail:</label>
-                <input type="text" id="email" name="email">
+                <input type="text" id="email" name="email" required>
                 <br>
                 <label for="lastname">Nachname:</label>
-                <input type="text" id="lastname" name="lastname">
+                <input type="text" id="lastname" name="lastname" required>
                 <br>
                 <label for="firstname">Vorname:</label>
-                <input type="text" id="firstname" name="firstname">
+                <input type="text" id="firstname" name="firstname" required>
                 <br><br>
                 <button id="modifyUserButton">Abschicken</button>
             </form>
