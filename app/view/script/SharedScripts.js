@@ -877,20 +877,6 @@ function loadUsers(listId){
         })
 }
 
-async function countUsers(){
-    let userCount = 0;
-    const response = await fetch('http://localhost/Mediendatenbank/public/UserController/getAllUsers', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    const data = await response.json();
-    userCount = data.length;
-
-    return userCount;
-}
-
 async function getAllUsers(){
     let users = []
     const response = await fetch('http://localhost/Mediendatenbank/public/UserController/getAllUsers', {
@@ -906,8 +892,8 @@ async function getAllUsers(){
 }
 
 async function loadDashboard(){
-    const userCount = await countUsers();
     const users = await getAllUsers();
+    const userCount = users.length;
     const fetchPromises = [];
     const dbstatsarea = document.getElementById('dbStats');
     const userstatsarea = document.getElementById('userStats');
