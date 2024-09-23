@@ -1015,7 +1015,7 @@ async function loadDashboard(){
             const table = document.createElement('table');
             const header = table.createTHead();
             const headerRow = header.insertRow(0);
-            const headers = ['Fotos', 'Videos', 'Ebooks', 'Hörbücher', 'Schlagwörter'];
+            const headers = ['User', 'Fotos', 'Videos', 'Ebooks', 'Hörbücher', 'Schlagwörter'];
             headers.forEach((type) => {
                 const cell = document.createElement('th');
                 cell.textContent = type;
@@ -1024,7 +1024,7 @@ async function loadDashboard(){
 
             const tbody = table.createTBody();
             const valueRow = tbody.insertRow();
-            const counts = [photoCount, videoCount, ebookCount, audiobookCount, allKeyWordsCount];
+            const counts = [userCount, photoCount, videoCount, ebookCount, audiobookCount, allKeyWordsCount];
             counts.forEach(count => {
                 const cell = valueRow.insertCell();
                 cell.textContent = count;
@@ -1032,9 +1032,6 @@ async function loadDashboard(){
 
             dbstatsarea.innerHTML = '';
             dbstatsarea.appendChild(table);
-
-            console.log('Medien gesamt nach Typ: Fotos: ' + photoCount + ', Videos: ' + videoCount + ', Ebooks: ' + ebookCount + ', Hörbücher: ' + audiobookCount);
-            console.log('Anzahl aller Schlagwörter: ' + allKeyWordsCount);
 
             const userTable = document.createElement('table');
             const userHeader = userTable.createTHead();
