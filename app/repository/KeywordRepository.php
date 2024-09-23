@@ -130,10 +130,9 @@ class KeywordRepository
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
-            $associations[] = $row;
-
-            $stmt->close();
+            $associations[] = $row;  
         }
+        $stmt->close();
         return $associations;
     }
 
