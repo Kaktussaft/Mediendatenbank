@@ -290,9 +290,15 @@ async function loadAll(){
                             if (association.Schlagwort_ID != lastKeywordId){
                                 lastKeywordId = association.Schlagwort_ID;
                                 
+                                objectHandled = false;
+
+                                if(inAll === false){
+                                    objectHandled = true;
+                                }
+                                
                                 if(!Object.values(association).includes(element.id)){
                                     inAll = false;
-                                } else{
+                                } else {
                                     objectHandled = true;
                                 }
                             } else {
