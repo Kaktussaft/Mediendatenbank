@@ -66,7 +66,7 @@ $isAdmin = $data['isAdmin'];
             <div class="keywording">
                 <div class="keyWordList" id="keyWordList"></div>
                 <div class="modifyKeyWords">
-                    <button id="open-modifykeyword-modal" class="modifyKeyWordButton">Schlagwörter bearbeiten...</button>
+                    <button id="open-modifykeyword-modal" class="modifyKeyWordButton">Schlagwörter verwalten...</button>
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@ $isAdmin = $data['isAdmin'];
     <div id="modifyKeyWordModal" class="modal">
         <div class="modal-content">
             <span class="close" id="close-modifykeyword-modal">&times;</span>
-            <h2>Meine Schlagwörter bearbeiten</h2>
+            <h2>Meine Schlagwörter verwalten</h2>
             <div class="modifyKeyWordList" id="modifyKeyWordList"></div>
             <button id="open-modifySingleKeyWord-modal">Schlagwort bearbeiten</button><br>
             <button id="open-newKeyWord-modal">Neues Schlagwort</button>
