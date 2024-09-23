@@ -82,10 +82,12 @@ class KeywordRepository
     public function assignKeywordToMedia($keywordId, $mediaId)
     {
         $columnName = $this->mediumRepository->idTypeToTableId($mediaId);
-        $stmt = $this->conn->prepare("INSERT INTO SchlagwortMedien (Schlagwort_ID, $columnName) VALUES (?, ?)");
-        $stmt->bind_param("is", $keywordId, $mediaId);
-        $stmt->execute();
-        $stmt->close();
+        if (!$this->checkIfAssociationExists($keywordId, $mediaId, $columnName)) {
+            $stmt = $this->conn->prepare("INSERT INTO SchlagwortMedien (Schlagwort_ID, $columnName) VALUES (?, ?)");
+            $stmt->bind_param("is", $keywordId, $mediaId);
+            $stmt->execute();
+            $stmt->close();
+        }
     }
 
     public function removeKeywordFromMedia($keywordId, $mediaId)
@@ -133,5 +135,15 @@ class KeywordRepository
             $stmt->close();
         }
         return $associations;
+    }
+
+    public function checkIfAssociationExists($keywordId, $mediaId, $columnName)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM SchlagwortMedien WHERE Schlagwort_ID = ? AND $columnName = ?");
+        $stmt->bind_param("is", $keywordId, $mediaId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        return $result->num_rows > 0;
     }
 }
