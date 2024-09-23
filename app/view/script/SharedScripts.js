@@ -371,12 +371,18 @@ async function loadPhotos() {
                     selectedKeywords.forEach(association =>{
                         if (association.Schlagwort_ID != lastKeywordId){
                             lastKeywordId = association.Schlagwort_ID;
-                            
-                            if(!Object.values(association).includes(img.id)){
-                                inAll = false;
-                            } else{
-                                objectHandled = true;
-                            }
+                                
+                                objectHandled = false;
+
+                                if(inAll === false){
+                                    objectHandled = true;
+                                }
+                                
+                                if(!Object.values(association).includes(img.id)){
+                                    inAll = false;
+                                } else {
+                                    objectHandled = true;
+                                }
                         } else {
                             if (Object.values(association).includes(img.id) && !objectHandled) {
                                 inAll = true;
@@ -443,12 +449,18 @@ async function loadVideos() {
                     selectedKeywords.forEach(association =>{
                         if (association.Schlagwort_ID != lastKeywordId){
                             lastKeywordId = association.Schlagwort_ID;
-                            
-                            if(!Object.values(association).includes(vid.id)){
-                                inAll = false;
-                            } else{
-                                objectHandled = true;
-                            }
+                                
+                                objectHandled = false;
+
+                                if(inAll === false){
+                                    objectHandled = true;
+                                }
+                                
+                                if(!Object.values(association).includes(vid.id)){
+                                    inAll = false;
+                                } else {
+                                    objectHandled = true;
+                                }
                         } else {
                             if (Object.values(association).includes(vid.id) && !objectHandled) {
                                 inAll = true;
@@ -515,12 +527,18 @@ async function loadEbooks() {
                     selectedKeywords.forEach(association =>{
                         if (association.Schlagwort_ID != lastKeywordId){
                             lastKeywordId = association.Schlagwort_ID;
-                            
-                            if(!Object.values(association).includes(ebk.id)){
-                                inAll = false;
-                            } else{
-                                objectHandled = true;
-                            }
+                                
+                                objectHandled = false;
+
+                                if(inAll === false){
+                                    objectHandled = true;
+                                }
+                                
+                                if(!Object.values(association).includes(ebk.id)){
+                                    inAll = false;
+                                } else {
+                                    objectHandled = true;
+                                }
                         } else {
                             if (Object.values(association).includes(ebk.id) && !objectHandled) {
                                 inAll = true;
@@ -587,12 +605,18 @@ async function loadAudioBooks() {
                     selectedKeywords.forEach(association =>{
                         if (association.Schlagwort_ID != lastKeywordId){
                             lastKeywordId = association.Schlagwort_ID;
-                            
-                            if(!Object.values(association).includes(abk.id)){
-                                inAll = false;
-                            } else{
-                                objectHandled = true;
-                            }
+                                
+                                objectHandled = false;
+
+                                if(inAll === false){
+                                    objectHandled = true;
+                                }
+                                
+                                if(!Object.values(association).includes(abk.id)){
+                                    inAll = false;
+                                } else {
+                                    objectHandled = true;
+                                }
                         } else {
                             if (Object.values(association).includes(abk.id) && !objectHandled) {
                                 inAll = true;
