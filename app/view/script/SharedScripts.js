@@ -267,15 +267,15 @@ async function loadAll(){
                             element.id = medium.Foto_ID;
                             break;
                         case 'Videos':
-                            element.src = '/Mediendatenbank/public/placeholders/placeholder_video.jpg';
+                            element.src = '/Mediendatenbank/public/placeholders/placeholder_video.png';
                             element.id = medium.Video_ID;
                             break;
                         case 'Ebooks':
-                            element.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.jpg';
+                            element.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.png';
                             element.id = medium.ebook_ID;
                             break;
                         case 'Hörbücher':
-                            element.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.jpg';
+                            element.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.png';
                             element.id = medium.Hörbuch_ID;
                             break;
                     }
