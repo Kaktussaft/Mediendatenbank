@@ -930,7 +930,6 @@ async function loadDashboard(){
             if (data.status === 'success') {
                 Object.keys(data.data).forEach(type => {
                     const mediumCount = data.data[type][0]["COUNT(*)"];
-                    console.log(type + ' des Benutzers ' + user.Benutzer_ID + ": " + mediumCount);
                     switch (type){
                         case "Fotos":
                             photoCount = photoCount + mediumCount;

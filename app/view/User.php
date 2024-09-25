@@ -223,6 +223,8 @@ $isAdmin = $data['isAdmin'];
                 const keyWordId = document.getElementById('keyWordSelection').value;
                 const keyWordName = document.getElementById('newKeyWordName').value;
                 updateKeyWord(keyWordId, keyWordName);
+                refreshKeyWords();
+                document.getElementById('modifySingleKeyWordModal').style.display = 'none';
             });
 
             document.getElementById('modifyUserButton').addEventListener('click', function(event) {
@@ -231,10 +233,14 @@ $isAdmin = $data['isAdmin'];
 
             document.getElementById('modifyMediumButton').addEventListener('click', function(event) {
                 updateMedium();
+                document.getElementById('modifyMediumModal').style.display = 'none';
+                document.getElementById('mediumModal').style.display = 'none';
+                loadAll();
             });
 
             document.getElementById('deleteMediumButton').addEventListener('click', function(event) {
                 deleteMedium();
+                document.getElementById('mediumModal').style.display = 'none';
             });
 
             

@@ -64,8 +64,10 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             initModal('accountModificationModal', 'open-accountModification-modal', 'close-accountModification-modal');
+            
+            await loadDashboard();
 
             document.getElementById('toggle-user-view').addEventListener('click', function(event) {
                 event.preventDefault();
@@ -82,12 +84,17 @@
                 await loadDashboard();
             });
 
-            document.getElementById('modifyUserButton').addEventListener('click', function(event) {
+            document.getElementById('modifyUserButton').addEventListener('click', async function(event) {
                 updateUserAdmin();
+                await loadDashboard();
+                document.getElementById('accountModificationModal').style.display = 'none';
+                
             });
 
-            document.getElementById('deleteUserButton').addEventListener('click', function(event) {
+            document.getElementById('deleteUserButton').addEventListener('click', async function(event) {
                 deleteUser();
+                document.getElementById('accountModificationModal').style.display = 'none';
+                await loadDashboard();
             });
 
             loadUsers('accountSelection');
