@@ -100,7 +100,7 @@ class UserController extends Controller
 
             $currentUser = $_SESSION['currentUser'];
             $userExists = $this->userRepository->readUserByUsername($username);
-            $isAdmin = $currentUser['Rolle'] === 'admin' ? 'true' : 'false';
+            $isAdmin = $currentUser['Rolle'] === 'admin' ? 'admin' : 'false';
 
             if ($userExists && $username != $currentUser['Benutzername'] ) {
                 echo json_encode(['statusMessage' => 'duplicate', 'message' => 'Nutzername bereits vergeben']);
