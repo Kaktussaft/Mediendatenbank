@@ -9,7 +9,7 @@ $isAdmin = $data['isAdmin'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User</title>
     <script type="text/javascript" src="/Mediendatenbank/app/view/script/SharedScripts.js"></script>
-    <link rel="stylesheet" href="/Mediendatenbank/app/View/style/PopUps.css">
+    <link rel="stylesheet" href="/Mediendatenbank/app/View/style/popUps.css">
     <link rel="stylesheet" href="/Mediendatenbank/app/View/style/UserPage.css">
 
 </head>
@@ -74,7 +74,7 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="accountModificationModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Kon">
             <span class="close" id="close-accountModification-modal">&times;</span>
             <h2>Konto bearbeiten</h2>
             <form id="modifyUserFrom">
@@ -96,7 +96,7 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="uploadModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Upl">
             <span class="close" id="close-upload-modal">&times;</span>
             <h2>Medien hochladen</h2>
             <form id="uploadForm" action="http://localhost/Mediendatenbank/public/MediumController/uploadFile" method="post" enctype="multipart/form-data" target="responseWindow">
@@ -108,7 +108,7 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="modifyKeyWordModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Sv">
             <span class="close" id="close-modifykeyword-modal">&times;</span>
             <h2>Meine Schlagwörter verwalten</h2>
             <div class="modifyKeyWordList" id="modifyKeyWordList"></div>
@@ -118,7 +118,7 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="modifySingleKeyWordModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Svb">
             <span class="close" id="close-modifySingleKeyWord-modal">&times;</span>
             <h2>Schlagwort bearbeiten</h2>
             <div id="modifySingleKeyWordInfo">
@@ -130,7 +130,7 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="newKeyWordModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Svn">
             <span class="close" id="close-newKeyWord-modal">&times;</span>
             <h2>Neues Schlagwort anlegen</h2>
             <input type="text" name="createKeyWordName" id="createKeyWordName" placeholder="Bezeichnung">
@@ -139,7 +139,7 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="mediumModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Med">
             <span class="close" id="close-mediumModal">&times;</span>
             <img class="modal-content" id="modalMedium">
             <div id="caption"></div><br>
@@ -149,9 +149,9 @@ $isAdmin = $data['isAdmin'];
     </div>
 
     <div id="modifyMediumModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Svb">
             <span class="close" id="close-modifyMedium-modal">&times;</span>
-            <h2>Schlagwort bearbeiten</h2>
+            <h2>Titel bearbeiten</h2>
             <div id="modifyMediumInfo">
                 <input type="text" id="newTitle" name="newTitle" placeholder="Neuen Titel eingeben"><br>
                 <button id="modifyMediumButton">Absenden</button>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
     <script type="text/javascript" src="/Mediendatenbank/app/view/script/SharedScripts.js"></script>
-    <link rel="stylesheet" href="/Mediendatenbank/app/View/style/PopUps.css">
+    <link rel="stylesheet" href="/Mediendatenbank/app/View/style/popUps.css">
     <link rel="stylesheet" href="/Mediendatenbank/app/View/style/AdminPage.css">
 </head>
 
@@ -36,7 +36,7 @@
     </div>
 
     <div id="accountModificationModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_Ureg">
             <span class="close" id="close-accountModification-modal">&times;</span>
             <h2>Konto bearbeiten</h2>
             <div id="accountModificationInfos">

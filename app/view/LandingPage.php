@@ -7,7 +7,7 @@
     <title>MyMediaSpace</title>
     <script type="text/javascript" src="/Mediendatenbank/app/View/script/SharedScripts.js"></script>
     <link rel="stylesheet" href="/Mediendatenbank/app/View/style/LandingPage.css">
-    <link rel="stylesheet" href="/Mediendatenbank/app/View/style/PopUps.css">    
+    <link rel="stylesheet" href="/Mediendatenbank/app/View/style/popUps.css">    
 
 </head>
 
@@ -31,13 +31,13 @@
     </div>
 
     <div id="registrationModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content_LP">
             <span class="close" id="close-registration-modal">&times;</span>
             <h2>Registrierung</h2>
             <form id="registrationForm" action="" method="POST" onsubmit="submitRegistration()">
                 <label for="firstname">Vorname:</label>
                 <input type="text" id="name" name="firstname" required>
-                <br><br>
+                <br>
                 <label for="lastname">Nachname:</label>
                 <input type="text" id="surname" name="lastname" required>
                 <br>
