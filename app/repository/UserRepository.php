@@ -58,10 +58,22 @@ class UserRepository
 
     public function updateUser($username, $email, $surname, $name, $isAdmin, $previousUsername)
     {
+        $userObject = $this->getUserByUsername($previousUsername);
+        $attributes = [$username, $email, $surname, $name, $isAdmin];
+        $attributeKeys = ["Benutzername", "EMail", "Nachname", "Vorname", "Rolle"];
+    
+        foreach ($attributes as $key => $attribute) {
+            if ($attribute == '') {
+                $attributes[$key] = $userObject[$attributeKeys[$key]];
+            }
+        }
+    
+        list($username, $email, $surname, $name, $isAdmin) = $attributes;
+    
         $stmt = $this->conn->prepare("UPDATE Benutzer SET Benutzername = ?, EMail = ?, Nachname = ?, Vorname = ?, Rolle = ? WHERE Benutzername = ?");
         $stmt->bind_param("ssssss", $username, $email, $surname, $name, $isAdmin, $previousUsername);
         $stmt->execute();
-        $stmt->close();  
+        $stmt->close();
     }
 
     public function readAllUsers()
