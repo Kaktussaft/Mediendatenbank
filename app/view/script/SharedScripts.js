@@ -438,7 +438,7 @@ async function loadVideos() {
             videos.forEach(video => {
                 const vid = document.createElement('img');
                 let lastKeywordId = 0;
-                vid.src = '/Mediendatenbank/public/placeholders/placeholder_video.jpg';
+                vid.src = '/Mediendatenbank/public/placeholders/placeholder_video.png';
                 vid.alt = video.Titel;
                 vid.id = video.Video_ID;
                 if (selectedKeywords.length > 0){
@@ -516,7 +516,7 @@ async function loadEbooks() {
             ebooks.forEach(ebook => {
                 const ebk = document.createElement('img');
                 let lastKeywordId = 0;
-                ebk.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.jpg';
+                ebk.src = '/Mediendatenbank/public/placeholders/placeholder_ebook.png';
                 ebk.alt = ebook.Titel;
                 ebk.id = ebook.ebook_ID;
                 if (selectedKeywords.length > 0){
@@ -594,7 +594,7 @@ async function loadAudioBooks() {
             audiobooks.forEach(audiobook => {
                 const abk = document.createElement('img');
                 let lastKeywordId = 0;
-                abk.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.jpg';
+                abk.src = '/Mediendatenbank/public/placeholders/placeholder_audiobook.png';
                 abk.alt = audiobook.Titel;
                 abk.id = audiobook.Hörbuch_ID;
                 if (selectedKeywords.length > 0){
