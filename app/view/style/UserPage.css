@@ -148,13 +148,13 @@ html, body {
     margin-left: 20px;
     margin-top: 20px;
     flex-grow: 1;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .contentArea img{
     width: 150px;
     margin: 10px;
-    border: 1px solid #ccc;
+    
 }
 
 button:hover, img:hover{
