@@ -6,6 +6,8 @@ Datenbank
 DBconnection definiert die Verbindung. Dort muss soweit nichts geändert werden, es sei denn es besteht der Wunsch den festgesetzten
 Namen der Datenbank (momentan "Mediendatenbank") zu ändern. 
 
+eine dummy Datenbank wird im zip file bereitgestellt und kann über phpmyadmin importiert werden. 
+
 Das aufsetzten funktioniert wie folgt:
 in phpmyadmin einen neue Datenbank mit dem Namen "Mediendatenbank" erstellen
 im Terminal in den Ordner database navigieren
