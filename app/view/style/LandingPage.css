@@ -1,5 +1,5 @@
 html, body {
-    height: 100%; /* Stellen sicher, dass der gesamte Viewport abgedeckt wird */
+    height: 100%;
     background-color: #35343d;
     background-image: url(../../../Design/Background.jpg);
     background-size: cover;
@@ -8,10 +8,10 @@ html, body {
 
 body {
     display: grid;
-    justify-content: center; /* Zentriert horizontal */
+    justify-content: center; 
     align-content: center;
-    place-items: center;  /*Zentriert vertikal */
-    height: 100vh; /* Nimmt die gesamte Höhe des Viewports ein */
+    place-items: center;  
+    height: 100vh; 
 }
 
 .welcomeMessage{
@@ -24,9 +24,9 @@ body {
     border-radius: 25px;
     border: 5px solid #02BFBF;
     padding: 20px;
-    min-width: 100px; /* Startgröße */
-    max-width: 30%; /* Wächst bis zur vollen Breite des Containers */
-    min-height: 10px; /* Mindesthöhe */
+    min-width: 100px; 
+    max-width: 30%; 
+    min-height: 10px; 
     background-color: white;
     text-align: center;
     display: flex;
@@ -44,11 +44,10 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Zentriert den Button und das Textfeld horizontal */
+    align-items: stretch; 
 }
 
 .registrationMessage{
-    /*padding: 20px;    */
     text-align: center;
     margin-bottom: 15px;
 }
@@ -61,9 +60,6 @@ body {
     font-weight: bold;
 }
 
-
-
-/*Fonts*/
 *{
     font-family: Arial, Helvetica, sans-serif;
 }
